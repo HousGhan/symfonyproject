@@ -1,3 +1,7 @@
-body {
-    background-color: skyblue;
+@import "bootstrap.min.css";
+
+@media (max-width:756px){
+  .login-wrapper{
+    width:90% !important
+  }
 }
