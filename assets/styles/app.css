@@ -1,7 +1,12 @@
 @import "bootstrap.min.css";
 
-@media (max-width:756px){
-  .login-wrapper{
-    width:90% !important
+.navbar {
+  z-index: 1000;
+  width: fit-content !important;
+}
+
+@media (max-width: 756px) {
+  .login-wrapper {
+    width: 90% !important;
   }
 }
