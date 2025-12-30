@@ -34,7 +34,11 @@
   }
 } */
 
-@media (max-width: 756px) {
+.login-wrapper {
+  width: 30% !important;
+}
+
+@media (max-width: 992px) {
   .login-wrapper {
     width: 90% !important;
   }

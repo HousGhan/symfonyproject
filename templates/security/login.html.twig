@@ -8,7 +8,7 @@
 	</head>
 	<body class="vh-100 d-flex align-items-center justify-content-center">
 		<form method="post" class="d-flex justify-content-center flex-fill">
-			<div class="login-wrapper p-4 rounded-4 w-50 d-flex flex-column gap-3 shadow" style="backdrop-filter: blur(5px)">
+			<div class="login-wrapper p-4 rounded-4 d-flex flex-column gap-3 shadow" style="backdrop-filter: blur(5px)">
 				<h3 class="text-center">Login</h3>
 				{% if error %}
 					<div class="alert alert-danger fw-bold my-0">{{ error.messageKey }}</div>
@@ -29,7 +29,7 @@
 					<input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 				</div>
 				<div class="text-center">
-					<button class="btn btn-primary px-5 rounded-pill fw-medium" type="submit">
+					<button class="btn btn-primary px-5 rounded-pill fw-medium dark-blue border-0" type="submit">
 						Login
 					</button>
 				</div>
