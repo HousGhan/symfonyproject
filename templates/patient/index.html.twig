@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Patients
+{% endblock %}
+
+{% block body %}
+	<h1 class="text-center">Patients</h1>
+	<div class="text-center">
+		<a href="{{path("patient_add")}}" class="btn p-0 border-0">
+			<img src="{{asset("svgs/add.svg")}}" alt="">
+		</a>
+	</div>
+	<div class="table-responsive my-4">
+		<table class="table table-borderless table-hover rounded-4 overflow-hidden">
+			<thead>
+				<tr class='table-light'>
+					<th class="dark-blue">CIN</th>
+					<th class="dark-blue">FirstName</th>
+					<th class="dark-blue">LastName</th>
+					<th class="dark-blue">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for patient in patients %}
+					<tr class='table-light'>
+						<td>{{patient.cin}}</td>
+						<td>{{patient.firstName}}</td>
+						<td>{{patient.lastName}}</td>
+						<td class="d-flex justify-content-evenly align-items-center">
+							<a href="{{path("appointement_add",{id:patient.id})}}" class="btn p-0 border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Add appointement">
+								<img src="{{asset("svgs/calendaradd.svg")}}" alt="Add appointement btn">
+							</a>
+							<a href="{{path("patient_edit",{ id: patient.id })}}" class="btn p-0 border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Edit patient">
+								<img src="{{asset("svgs/edit.svg")}}" alt="Edit btn">
+							</a>
+							<form method="post" class="text-center position-relative" action="{{path('patient_delete', {id: patient.id})}}" onsubmit="return confirm('Delete patient {{patient.cin}}?');">
+								<input type="hidden" name="_token" value="{{csrf_token('delete_patient_' ~ patient.id)}}">
+								<button type="submit" class="btn p-0 border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Delete patient">
+									<img src="{{asset("svgs/delete.svg")}}" alt="Delete btn">
+								</button>
+							</form>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

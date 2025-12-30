@@ -36,8 +36,11 @@ security:
 
   # Note: Only the *first* matching rule is applied
   access_control:
-    - { path: ^/dashboard, roles: ROLE_DOCTOR }
-    # - { path: ^/profile, roles: ROLE_USER }
+    # - { path: ^/dashboard, roles: ROLE_DOCTOR }
+    # - { path: ^/patients, roles: ROLE_DOCTOR }
+    # - { path: ^/appointements, roles: ROLE_DOCTOR }
+    # - { path: ^/patients, roles: ROLE_SECRETARY }
+    # - { path: ^/appointements, roles: ROLE_SECRETARY }
 
 when@test:
   security:

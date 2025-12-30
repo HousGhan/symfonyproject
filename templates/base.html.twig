@@ -13,42 +13,72 @@
 			{% endblock %}
 		{% endblock %}
 	</head>
-	<body class="vh-100 vw-100 d-flex">
+	<body class="vh-100 vw-100 d-flex overflow-hidden">
 		{% set page = app.request.attributes.get('_route') %}
-		<nav class="navbar bg-secondary shadow w-25 h-100 d-flex flex-column align-items-between gap-4 py-3">
-			<button class="btn p-0 border-0" type="button">
-				<img src="{{asset("svgs/menu.svg")}}" alt="menu button">
-			</button>
-			<ul class="navbar-nav flex-fill">
-				<li class="nav-item position-relative p-2">
-					<a class="nav-link px-2 rounded-4 stretched-link {{page == "app_dashboard" ? " bg-dark-subtle" : " "}}" href="{{path("app_dashboard")}}">
-						<img src="{{asset("svgs/chart.svg")}}" alt="">
+		<nav class="navbar bg-secondary shadow vh-100 d-flex flex-column align-items-center gap-4 py-3">
+			<div class="w-100 position-relative px-2">
+				<button class="menu-btn btn p-0 border-0 p-2 nav-link stretched-link" type="button">
+					<img src="{{asset("svgs/menu.svg")}}" alt="menu button" class="w-100">
+				</button>
+			</div>
+			<ul class="navbar-nav flex-fill w-100 ">
+				{% if is_granted("ROLE_DOCTOR") %}
+					<li class="nav-item position-relative px-2">
+						<a class="nav-link px-2 rounded-4 stretched-link d-flex align-items-center gap-2 {{page == "app_dashboard" ? " bg-dark-subtle" : " "}}" href="{{path("app_dashboard")}}">
+							<img src="{{asset("svgs/chart.svg")}}" alt="dashboard icon">
+							<span class="fw-bold d-none fs-5">Dashboard</span>
+						</a>
+					</li>
+				{% endif %}
+				<li class="nav-item position-relative px-2">
+					<a class="nav-link px-2 rounded-4 stretched-link d-flex align-items-center gap-2 {{page == "app_patients" ? " bg-dark-subtle" : " "}}" href="{{path("app_patients")}}">
+						<img src="{{asset("svgs/patients.svg")}}" alt="patients icon">
+						<span class="fw-bold d-none fs-5">Patients</span>
 					</a>
 				</li>
-				<li class="nav-item position-relative p-2">
-					<a class="nav-link px-2 rounded-4 stretched-link {{page == "app_dashboard" ? " bg-dark-subtle" : " "}}" href="{{path("app_dashboard")}}">
-						<img src="{{asset("svgs/profile.svg")}}" alt="">
+				<li class="nav-item position-relative px-2">
+					<a class="nav-link px-2 rounded-4 stretched-link d-flex align-items-center gap-2 {{page == "app_appointements" ? " bg-dark-subtle" : " "}}" href="{{path("app_appointements")}}">
+						<img src="{{asset("svgs/calendar.svg")}}" alt="appointements icon">
+						<span class="fw-bold d-none fs-5">Appointements</span>
 					</a>
 				</li>
-				<li class="nav-item position-relative p-2">
-					<a class="nav-link px-2 rounded-4 stretched-link {{page == "app_dashboard" ? " bg-dark-subtle" : " "}}" href="{{path("app_dashboard")}}">
-						<img src="{{asset("svgs/profile.svg")}}" alt="">
+				{% if is_granted("ROLE_DOCTOR") %}
+					<li class="nav-item position-relative px-2">
+						<a class="nav-link px-2 rounded-4 stretched-link d-flex align-items-center gap-2 {{page == "app_users" ? " bg-dark-subtle" : " "}}" href="{{path("app_users")}}">
+							<img src="{{asset("svgs/profile.svg")}}" alt="appointements icon">
+							<span class="fw-bold d-none fs-5">Users</span>
+						</a>
+					</li>
+				{% endif %}
+			</ul>
+			<ul class="navbar-nav w-100">
+				<li class="nav-item position-relative px-2 ">
+					<button class="nav-link px-2 stretched-link d-flex align-items-center gap-2" type="button">
+						<img src="{{asset("svgs/settings.svg")}}" alt=""><span class="fw-bold d-none fs-5">Settings</span>
+					</button>
+				</li>
+				<li class="nav-item position-relative px-2 ">
+					<a href="{{logout_path()}}" class="nav-link px-2 stretched-link d-flex align-items-center gap-2">
+						<img src="{{asset("svgs/logout.svg")}}" alt="logout icon">
+						<span class="fw-bold d-none fs-5">Logout</span>
 					</a>
 				</li>
 			</ul>
-			<div class="d-flex gap-3 flex-column">
-				<button class="btn p-0 border-0" type="button">
-					<img src="{{asset("svgs/settings.svg")}}" alt="">
-				</button>
-				<a href="{{logout_path()}}">
-					<img src="{{asset("svgs/logout.svg")}}" alt="">
-				</a>
-			</div>
 		</nav>
-		<main class="flex-fill"> {% block body %}{% endblock %}
-			<div class="container border">
-				<h1>sdjflijdgsi</h1>
+		<main class="flex-fill overflow-y-auto">
+			<div class="d-flex justify-content-center align-items-center mb-3">
+				<span class="p-3 rounded-bottom-5 py-2 fw-medium text-white dark-blue">
+					{{app.user.getFullName()}}
+					({{app.user.getRoles()[0] == "ROLE_DOCTOR" ? "DOCTOR" : "SECRETARY"}})
+				</span>
 			</div>
-		</main>
-	</body>
-</html>
+			<div class="container"> {% block body %}{% endblock %}
+				</div>
+			</main>
+			{% for label,messages in app.flashes() %}
+				{% for message in messages %}
+					<div class="crud-alert alert alert-{{label == "success" ? "success" : "danger"}} rounded-start-4 fw-medium rounded-end-0 my-5  shadow position-fixed end-0 top-0">{{message}}</div>
+				{% endfor %}
+			{% endfor %}
+		</body>
+	</html>

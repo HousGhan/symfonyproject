@@ -20,7 +20,13 @@ class SecurityController extends AbstractController
     // dd($user);
 
     if ($user) {
-      return $this->redirectToRoute("app_dashboard");
+      if (in_array('ROLE_DOCTOR', $user->getRoles())) {
+        return $this->redirectToRoute('app_dashboard');
+      } elseif (in_array('ROLE_SECRETARY', $user->getRoles())) {
+        return $this->redirectToRoute('app_patients');
+      } else {
+        return $this->redirectToRoute("app_login");
+      }
     }
 
     return $this->render('security/login.html.twig', [
