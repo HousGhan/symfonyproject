@@ -17,9 +17,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class PatientController extends AbstractController
 {
   #[Route('/patients', name: 'app_patients')]
-  public function index(PatientRepository $pr): Response
+  public function index(PatientRepository $pr, Request $request): Response
   {
-    $patients = $pr->findAll();
+    // $p = $pr->searchBy();
+    // dd($request->query->get('search'));
+    $patients = $pr->search($request->query->get('search'));
     return $this->render('patient/index.html.twig', compact('patients'));
   }
 

@@ -10,6 +10,12 @@
 			<img src="{{asset("svgs/add.svg")}}" alt="">
 		</a>
 	</div>
+	<form action="{{path("app_patients")}}" method="get" class="my-3">
+		<div class="input-group">
+			<input type="search" name='search' class="form-control rounded-4 rounded-end-0" placeholder="Search patient by CIN, Name...">
+			<button type="submit" class='btn border-0 dark-blue rounded-start-0'>Search</button>
+		</div>
+	</form>
 	{% embed "layouts/table.twig" %}
 		{% block thead %}
 			<th class="dark-blue">CIN</th>
