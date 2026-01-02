@@ -5,4 +5,31 @@
 
 {% block body %}
 	<h1 class="text-center">Appointements</h1>
+	{% embed "layouts/table.twig" %}
+		{% block thead %}
+			<th class="dark-blue">Patient</th>
+			<th class="dark-blue">Appointement Date/Time</th>
+		{% endblock %}
+		{% block tbody %}
+			{% for appointement in appointements %}
+				<tr class="table-light fw-medium">
+					<td>{{appointement.patient.firstName ~ " " ~ appointement.patient.lastName ~ "(" ~ appointement.patient.cin ~ ")"}}</td>
+					<td>{{appointement.date|date("D, d M Y H:i A")}}</td>
+					<td class="align-middle">
+						<div class="d-flex justify-content-evenly align-items-center gap-2">
+							<a href="{{ path('appointement_edit', { id: appointement.id }) }}" class="btn p-0 border-0" data-bs-toggle="tooltip" title="Edit appointement">
+								<img src="{{ asset('svgs/edit.svg') }}" alt="Edit">
+							</a>
+							<form method="post" action="{{ path('appointement_delete', { id: appointement.id }) }}" onsubmit="return confirm('Cancel appointement {{ appointement.patient.cin }}?');">
+								<input type="hidden" name="_token" value="{{ csrf_token('delete_appointement_' ~ appointement.id) }}">
+								<button type="submit" class="btn p-0 border-0" data-bs-toggle="tooltip" title="Cancel appointement">
+									<img src="{{ asset('svgs/delete.svg') }}" alt="Delete">
+								</button>
+							</form>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		{% endblock %}
+	{% endembed %}
 {% endblock %}

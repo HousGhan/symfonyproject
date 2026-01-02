@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\User;
+use App\Entity\Patient;
 use Faker\Factory;
 use DateTimeImmutable as Date;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -19,7 +20,22 @@ class AppFixtures extends Fixture
   }
   public function load(ObjectManager $manager): void
   {
-    $f = Factory::create("en_US");
+    $f = Factory::create("ar_MA");
+
+    for ($i = 0; $i < 10; $i++) {
+      $patient = new Patient();
+      $patient->setCin($f->uuid);
+      $patient->setFirstName($f->firstName);
+      $patient->setLastName($f->lastName);
+      $patient->setPhone($f->name);
+      $patient->setCreatedBy($f->username);
+      $patient->setCreatedAt(new Date());
+      $patient->setUpdatedAt(new Date());
+
+      $manager->persist($patient);
+    }
+    $manager->flush();
+
     $u1 = new User();
     $u1->setFirstName($f->firstName);
     $u1->setLastName($f->lastName);
@@ -63,5 +79,6 @@ class AppFixtures extends Fixture
     $manager->persist($u3);
 
     $manager->flush();
+
   }
 }

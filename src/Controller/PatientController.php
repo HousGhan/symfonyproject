@@ -35,6 +35,8 @@ final class PatientController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+      $user = $this->getUser();
+      $patient->setCreatedBy($user->getFullName());
       $patient->setCreatedAt(new Date());
       $patient->setUpdatedAt(new Date());
       $em->persist($patient);
@@ -63,6 +65,8 @@ final class PatientController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+      $user = $this->getUser();
+      $patient->setCreatedBy($user->getFullName());
       $patient->setUpdatedAt(new Date());
 
       $em->flush();

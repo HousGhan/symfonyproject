@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AppointementRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Rule;
 
 #[ORM\Entity(repositoryClass: AppointementRepository::class)]
 class Appointement
@@ -18,6 +19,7 @@ class Appointement
     private ?Patient $patient = null;
 
     #[ORM\Column]
+    #[Rule\NotBlank(message: "Required")]
     private ?\DateTimeImmutable $date = null;
 
     #[ORM\Column(nullable: true)]
@@ -48,7 +50,7 @@ class Appointement
         return $this->date;
     }
 
-    public function setDate(\DateTimeImmutable $date): static
+    public function setDate(?\DateTimeImmutable $date): static
     {
         $this->date = $date;
 

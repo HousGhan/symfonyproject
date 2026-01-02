@@ -12,7 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity as Unique;
 #[ORM\Entity(repositoryClass: PatientRepository::class)]
 #[Unique(
   fields: ['cin'],
-  message: 'This CIN already exists.'
+  message: 'This CIN already exists'
 )]
 class Patient
 {
@@ -22,15 +22,15 @@ class Patient
   private ?int $id = null;
 
   #[ORM\Column(length: 255, nullable: true)]
-  #[Rule\NotBlank(message: "First Name is required")]
+  #[Rule\NotBlank(message: "Required")]
   private ?string $firstName = null;
 
   #[ORM\Column(length: 255, nullable: true)]
-  #[Rule\NotBlank(message: "First Name is required")]
+  #[Rule\NotBlank(message: "Required")]
   private ?string $lastName = null;
 
-  #[ORM\Column(length: 255, unique: true)]
-  #[Rule\NotBlank(message: "CIN is required")]
+  #[ORM\Column(length: 255)]
+  #[Rule\NotBlank(message: "Required")]
   private ?string $cin = null;
 
   #[ORM\Column(nullable: true)]
@@ -44,6 +44,13 @@ class Patient
    */
   #[ORM\OneToMany(targetEntity: Appointement::class, mappedBy: 'patient', orphanRemoval: true)]
   private Collection $appointements;
+
+  #[ORM\Column(length: 255, nullable: true)]
+  private ?string $createdBy = null;
+
+  #[ORM\Column(length: 255, nullable: true)]
+  #[Rule\NotBlank(message: "Required")]
+  private ?string $phone = null;
 
   public function __construct()
   {
@@ -84,7 +91,7 @@ class Patient
     return $this->cin;
   }
 
-  public function setCin(string $cin): static
+  public function setCin(?string $cin): static
   {
     $this->cin = $cin;
 
@@ -141,6 +148,30 @@ class Patient
         $appointement->setPatient(null);
       }
     }
+
+    return $this;
+  }
+
+  public function getCreatedBy(): ?string
+  {
+    return $this->createdBy;
+  }
+
+  public function setCreatedBy(?string $createdBy): static
+  {
+    $this->createdBy = $createdBy;
+
+    return $this;
+  }
+
+  public function getPhone(): ?string
+  {
+    return $this->phone;
+  }
+
+  public function setPhone(?string $phone): static
+  {
+    $this->phone = $phone;
 
     return $this;
   }

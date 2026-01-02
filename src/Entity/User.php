@@ -6,9 +6,15 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Rule;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity as Unique;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[Unique(
+  fields: ['email'],
+  message: 'This email is taken'
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
   #[ORM\Id]
@@ -17,24 +23,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   private ?int $id = null;
 
   #[ORM\Column(length: 180)]
+  #[Rule\NotBlank(message: "Required")]
+  #[Rule\Email(message: "Inavalid email")]
   private ?string $email = null;
 
   /**
    * @var list<string> The user roles
    */
   #[ORM\Column]
+  #[Rule\NotBlank(message: "Required")]
   private array $roles = [];
 
   /**
    * @var string The hashed password
    */
   #[ORM\Column]
+  #[Rule\NotBlank(message: "Required")]
   private ?string $password = null;
 
   #[ORM\Column(length: 255)]
+  #[Rule\NotBlank(message: "Required")]
   private ?string $firstName = null;
 
   #[ORM\Column(length: 255)]
+  #[Rule\NotBlank(message: "Required")]
   private ?string $lastName = null;
 
   #[ORM\Column(nullable: true)]
@@ -53,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     return $this->email;
   }
 
-  public function setEmail(string $email): static
+  public function setEmail(?string $email): static
   {
     $this->email = $email;
 
@@ -77,8 +89,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   {
     $roles = $this->roles;
     // guarantee every user at least has ROLE_USER
-    $roles[] = 'ROLE_USER';
-
     return array_unique($roles);
   }
 
@@ -100,7 +110,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     return $this->password;
   }
 
-  public function setPassword(string $password): static
+  public function setPassword(?string $password): static
   {
     $this->password = $password;
 
@@ -123,7 +133,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     return $this->firstName;
   }
 
-  public function setFirstName(string $firstName): static
+  public function setFirstName(?string $firstName): static
   {
     $this->firstName = $firstName;
 
@@ -135,7 +145,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     return $this->lastName;
   }
 
-  public function setLastName(string $lastName): static
+  public function setLastName(?string $lastName): static
   {
     $this->lastName = $lastName;
 

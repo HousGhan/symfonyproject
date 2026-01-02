@@ -5,4 +5,42 @@
 
 {% block body %}
 	<h1 class="text-center">Users</h1>
+	<div class="text-center">
+		<a href="{{path("user_add")}}" class="btn p-0 border-0">
+			<img src="{{asset("svgs/add.svg")}}" alt="">
+		</a>
+	</div>
+	{% embed "layouts/table.twig" %}
+		{% block thead %}
+			<th class="dark-blue">First Name</th>
+			<th class="dark-blue">Last Name</th>
+			<th class="dark-blue">Email</th>
+			<th class="dark-blue">Role</th>
+			<th class="dark-blue">Created At</th>
+		{% endblock %}
+		{% block tbody %}
+			{% for user in users %}
+				<tr class='table-light fw-medium'>
+					<td>{{user.firstName}}</td>
+					<td>{{user.lastName}}</td>
+					<td>{{user.email}}</td>
+					<td>{{ user.roles|join(', ') }}</td>
+					<td>{{user.createdAt|date("D, d M Y H:i")}}</td>
+					<td class="align-middle">
+						<div class="d-flex justify-content-evenly align-items-center">
+							<a href="{{path("user_edit",{ id: user.id })}}" class="btn p-0 border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Edit user">
+								<img src="{{asset("svgs/edit.svg")}}" alt="Edit btn">
+							</a>
+							<form method="post" class="text-center position-relative" action="{{path('user_delete', {id: user.id})}}" onsubmit="return confirm('Delete user {{user.getFullName()}}?');">
+								<input type="hidden" name="_token" value="{{csrf_token('delete_user_' ~ user.id)}}">
+								<button type="submit" class="btn p-0 border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Delete user">
+									<img src="{{asset("svgs/delete.svg")}}" alt="Delete btn">
+								</button>
+							</form>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		{% endblock %}
+	{% endembed %}
 {% endblock %}

@@ -1,7 +1,7 @@
 {# templates/patient/new.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Patient/Edit
+{% block title %}User/Add
 {% endblock %}
 
 {% block body %}
@@ -10,11 +10,10 @@
 			<div class="col-md-6">
 				<div class="card rounded-4 overflow-hidden">
 					<div class="card-header" style="background-color: #1c274c">
-						<h4 class="mb-0 text-center text-white">Edit Patient</h4>
+						<h4 class="mb-0 text-center text-white">Add User</h4>
 					</div>
 					<div class="card-body">
 						{{ form_start(form) }}
-
 						<div class="form-floating mb-3">
 							{{ form_widget(form.firstName) }}
 							<label for="">
@@ -40,35 +39,46 @@
 							</label>
 						</div>
 						<div class="form-floating mb-3">
-							{{ form_widget(form.cin) }}
+							{{ form_widget(form.email) }}
 							<label for="">
-								CIN
+								Email
 								<span class="text-danger fw-bold">
 									*
-									{% if form.cin.vars.errors|length > 0 %}
-										{{ form.cin.vars.errors[0].message }}
+									{% if form.email.vars.errors|length > 0 %}
+										{{ form.email.vars.errors[0].message }}
 									{% endif %}
 								</span>
 							</label>
 						</div>
 						<div class="form-floating mb-3">
-							{{ form_widget(form.phone) }}
+							{{ form_widget(form.password) }}
 							<label for="">
-								Phone
+								Password
 								<span class="text-danger fw-bold">
 									*
-									{% if form.phone.vars.errors|length > 0 %}
-										{{ form.phone.vars.errors[0].message }}
+									{% if form.password.vars.errors|length > 0 %}
+										{{ form.password.vars.errors[0].message }}
 									{% endif %}
 								</span>
 							</label>
 						</div>
+						<div class="mb-3">
+							<label for="">
+								Role
+								<span class="text-danger fw-bold">
+									*
+									{% if form.roles.vars.errors|length > 0 %}
+										{{ form.roles.vars.errors[0].message }}
+									{% endif %}
+								</span>
+							</label>
+							{{ form_widget(form.roles) }}
+						</div>
 						<div class="text-center">
-							<button type="submit" class="btn btn-primary border-0 rounded-pill px-5 fw-medium dark-blue">
-								Edit
+							<button type="submit" class="btn btn-success border-0 rounded-pill px-5 fw-medium dark-blue">
+								Add
 							</button>
 						</div>
-
 						{{ form_end(form) }}
 					</div>
 				</div>

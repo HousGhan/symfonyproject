@@ -14,38 +14,52 @@
 					</div>
 					<div class="card-body">
 						{{ form_start(form) }}
-
 						<div class="form-floating mb-3">
 							{{ form_widget(form.firstName) }}
 							<label for="">
 								First Name
-								{% if form.firstName.vars.errors|length > 0 %}
-									<span class="text-danger fw-bold">
-										*
-										{{ form.firstName.vars.errors[0].message }}</span>
-								{% endif %}
+								<span class="text-danger fw-bold">
+									*
+									{% if form.firstName.vars.errors|length > 0 %}
+										{{ form.firstName.vars.errors[0].message }}
+									{% endif %}
+								</span>
 							</label>
 						</div>
 						<div class="form-floating mb-3">
 							{{ form_widget(form.lastName) }}
 							<label for="">
 								Last Name
-								{% if form.lastName.vars.errors|length > 0 %}
-									<span class="text-danger fw-bold">
-										*
-										{{ form.lastName.vars.errors[0].message }}</span>
-								{% endif %}
+								<span class="text-danger fw-bold">
+									*
+									{% if form.lastName.vars.errors|length > 0 %}
+										{{ form.lastName.vars.errors[0].message }}
+									{% endif %}
+								</span>
 							</label>
 						</div>
 						<div class="form-floating mb-3">
 							{{ form_widget(form.cin) }}
 							<label for="">
 								CIN
-								{% if form.cin.vars.errors|length > 0 %}
-									<span class="text-danger fw-bold">
-										*
-										{{ form.cin.vars.errors[0].message }}</span>
-								{% endif %}
+								<span class="text-danger fw-bold">
+									*
+									{% if form.cin.vars.errors|length > 0 %}
+										{{ form.cin.vars.errors[0].message }}
+									{% endif %}
+								</span>
+							</label>
+						</div>
+						<div class="form-floating mb-3">
+							{{ form_widget(form.phone) }}
+							<label for="">
+								Phone
+								<span class="text-danger fw-bold">
+									*
+									{% if form.phone.vars.errors|length > 0 %}
+										{{ form.phone.vars.errors[0].message }}
+									{% endif %}
+								</span>
 							</label>
 						</div>
 						<div class="text-center">
@@ -53,7 +67,6 @@
 								Add
 							</button>
 						</div>
-
 						{{ form_end(form) }}
 					</div>
 				</div>

@@ -10,39 +10,46 @@
 			<img src="{{asset("svgs/add.svg")}}" alt="">
 		</a>
 	</div>
-	<div class="table-responsive my-4">
-		<table class="table table-borderless table-hover rounded-4 overflow-hidden">
-			<thead>
-				<tr class='table-light'>
-					<th class="dark-blue">CIN</th>
-					<th class="dark-blue">FirstName</th>
-					<th class="dark-blue">LastName</th>
-					<th class="dark-blue">Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for patient in patients %}
-					<tr class='table-light'>
-						<td>{{patient.cin}}</td>
-						<td>{{patient.firstName}}</td>
-						<td>{{patient.lastName}}</td>
-						<td class="d-flex justify-content-evenly align-items-center">
+	{% embed "layouts/table.twig" %}
+		{% block thead %}
+			<th class="dark-blue">CIN</th>
+			<th class="dark-blue">First Name</th>
+			<th class="dark-blue">Last Name</th>
+			<th class="dark-blue">Phone</th>
+			{% if is_granted("ROLE_DOCTOR") %}
+				<th class="dark-blue">Created By</th>
+			{% endif %}
+		{% endblock %}
+		{% block tbody %}
+			{% for patient in patients %}
+				<tr class='table-light fw-medium'>
+					<td>{{patient.cin}}</td>
+					<td>{{patient.firstName}}</td>
+					<td>{{patient.lastName}}</td>
+					<td>{{patient.phone|default("No phone")}}</td>
+					{% if is_granted("ROLE_DOCTOR") %}
+						<td>{{patient.createdBy|default("Unknown")}}</td>
+					{% endif %}
+					<td class="align-middle">
+						<div class="d-flex justify-content-evenly align-items-center">
 							<a href="{{path("appointement_add",{id:patient.id})}}" class="btn p-0 border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Add appointement">
 								<img src="{{asset("svgs/calendaradd.svg")}}" alt="Add appointement btn">
 							</a>
 							<a href="{{path("patient_edit",{ id: patient.id })}}" class="btn p-0 border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Edit patient">
 								<img src="{{asset("svgs/edit.svg")}}" alt="Edit btn">
 							</a>
-							<form method="post" class="text-center position-relative" action="{{path('patient_delete', {id: patient.id})}}" onsubmit="return confirm('Delete patient {{patient.cin}}?');">
-								<input type="hidden" name="_token" value="{{csrf_token('delete_patient_' ~ patient.id)}}">
-								<button type="submit" class="btn p-0 border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Delete patient">
-									<img src="{{asset("svgs/delete.svg")}}" alt="Delete btn">
-								</button>
-							</form>
-						</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
+							{% if is_granted("ROLE_DOCTOR") %}
+								<form method="post" class="text-center position-relative" action="{{path('patient_delete', {id: patient.id})}}" onsubmit="return confirm('Delete patient {{patient.cin}}?');">
+									<input type="hidden" name="_token" value="{{csrf_token('delete_patient_' ~ patient.id)}}">
+									<button type="submit" class="btn p-0 border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Delete patient">
+										<img src="{{asset("svgs/delete.svg")}}" alt="Delete btn">
+									</button>
+								</form>
+							{% endif %}
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		{% endblock %}
+	{% endembed %}
 {% endblock %}
