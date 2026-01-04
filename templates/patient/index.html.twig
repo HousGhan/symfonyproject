@@ -12,50 +12,62 @@
 	</div>
 	<form action="{{path("app_patients")}}" method="get" class="my-3">
 		<div class="input-group">
-			<input type="search" name='search' class="form-control rounded-4 rounded-end-0" placeholder="Search patient by CIN, Name...">
+			<input type="search" name='search' class="form-control rounded-4 rounded-end-0" placeholder="Search patient by CIN(advised), Name...">
 			<button type="submit" class='btn border-0 dark-blue rounded-start-0'>Search</button>
 		</div>
 	</form>
-	{% embed "layouts/table.twig" %}
-		{% block thead %}
-			<th class="dark-blue">CIN</th>
-			<th class="dark-blue">First Name</th>
-			<th class="dark-blue">Last Name</th>
-			<th class="dark-blue">Phone</th>
-			{% if is_granted("ROLE_DOCTOR") %}
-				<th class="dark-blue">Created By</th>
-			{% endif %}
-		{% endblock %}
-		{% block tbody %}
-			{% for patient in patients %}
-				<tr class='table-light fw-medium'>
-					<td>{{patient.cin}}</td>
-					<td>{{patient.firstName}}</td>
-					<td>{{patient.lastName}}</td>
-					<td>{{patient.phone|default("No phone")}}</td>
-					{% if is_granted("ROLE_DOCTOR") %}
-						<td>{{patient.createdBy|default("Unknown")}}</td>
-					{% endif %}
-					<td class="align-middle">
-						<div class="d-flex justify-content-evenly align-items-center">
-							<a href="{{path("appointement_add",{id:patient.id})}}" class="btn p-0 border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Add appointement">
-								<img src="{{asset("svgs/calendaradd.svg")}}" alt="Add appointement btn">
-							</a>
-							<a href="{{path("patient_edit",{ id: patient.id })}}" class="btn p-0 border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Edit patient">
-								<img src="{{asset("svgs/edit.svg")}}" alt="Edit btn">
-							</a>
-							{% if is_granted("ROLE_DOCTOR") %}
-								<form method="post" class="text-center position-relative" action="{{path('patient_delete', {id: patient.id})}}" onsubmit="return confirm('Delete patient {{patient.cin}}?');">
-									<input type="hidden" name="_token" value="{{csrf_token('delete_patient_' ~ patient.id)}}">
-									<button type="submit" class="btn p-0 border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Delete patient">
-										<img src="{{asset("svgs/delete.svg")}}" alt="Delete btn">
-									</button>
-								</form>
-							{% endif %}
-						</div>
-					</td>
-				</tr>
-			{% endfor %}
-		{% endblock %}
-	{% endembed %}
+	{% if patients|length > 0 %}
+		{% embed "layouts/table.twig" %}
+			{% block thead %}
+				<th class="dark-blue">CIN</th>
+				<th class="dark-blue">First Name</th>
+				<th class="dark-blue">Last Name</th>
+				<th class="dark-blue">Phone</th>
+				{% if is_granted("ROLE_DOCTOR") %}
+					<th class="dark-blue">Created By</th>
+				{% endif %}
+			{% endblock %}
+			{% block tbody %}
+				{% for patient in patients %}
+					<tr class='table-light fw-medium'>
+						<td>{{patient.cin}}</td>
+						<td>{{patient.firstName}}</td>
+						<td>{{patient.lastName}}</td>
+						<td>{{patient.phone|default("No phone")}}</td>
+						{% if is_granted("ROLE_DOCTOR") %}
+							<td>{{patient.createdBy|default("Unknown")}}</td>
+						{% endif %}
+						<td class="align-middle">
+							<div class="d-flex justify-content-evenly gap-3 align-items-center">
+								<a href="{{path("appointement_add",{id:patient.id})}}" class="btn p-0 border-0" title="Add Appointement">
+									<img src="{{asset("svgs/calendaradd.svg")}}" alt="Add appointement btn">
+								</a>
+								{% if is_granted("ROLE_DOCTOR") %}
+									<a href="{{path("medicalrecord_add",{id:patient.id})}}" class="btn p-0 border-0" title="Add Medical record">
+										<img src="{{asset("svgs/addfolder.svg")}}" alt="Add medical record btn">
+									</a>
+									<a href="{{path("prescription_add",{id:patient.id})}}" class="btn p-0 border-0" title="Generate Prescription">
+										<img src="{{asset("svgs/docadd.svg")}}" alt="Generate prescription btn">
+									</a>
+								{% endif %}
+								<a href="{{path("patient_edit",{ id: patient.id })}}" class="btn p-0 border-0" title="Edit Patient">
+									<img src="{{asset("svgs/edit.svg")}}" alt="Edit btn">
+								</a>
+								{% if is_granted("ROLE_DOCTOR") %}
+									<form method="post" class="text-center position-relative" action="{{path('patient_delete', {id: patient.id})}}" onsubmit="return confirm('Delete patient {{patient.cin}}?');">
+										<input type="hidden" name="_token" value="{{csrf_token('delete_patient_' ~ patient.id)}}">
+										<button type="submit" class="btn p-0 border-0" title="Delete Patient">
+											<img src="{{asset("svgs/delete.svg")}}" alt="Delete btn">
+										</button>
+									</form>
+								{% endif %}
+							</div>
+						</td>
+					</tr>
+				{% endfor %}
+			{% endblock %}
+		{% endembed %}
+	{% else %}
+		<h1 class="text-center">No results</h1>
+	{% endif %}
 {% endblock %}

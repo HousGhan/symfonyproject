@@ -17,9 +17,9 @@ use DateTimeImmutable as Date;
 final class AppointementController extends AbstractController
 {
   #[Route('/appointements', name: 'app_appointements')]
-  public function index(AppointementRepository $ar): Response
+  public function index(AppointementRepository $ar, Request $request): Response
   {
-    $appointements = $ar->findAll();
+    $appointements = $ar->search($request->query->get('search'));
     // dd($appointements);
     return $this->render('appointement/index.html.twig', compact('appointements'));
   }
@@ -27,8 +27,8 @@ final class AppointementController extends AbstractController
   #[Route('/appointements/{id}/add', name: 'appointement_add')]
   public function create(Request $request, Patient $patient, EntityManagerInterface $em)
   {
-    $p = new Appointement();
-    $form = $this->createForm(AppointementType::class, $p, [
+    $appointement = new Appointement();
+    $form = $this->createForm(AppointementType::class, $appointement, [
       'is_edit' => false
     ]);
     // dd($form);
@@ -36,14 +36,14 @@ final class AppointementController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-      $p->setPatient($patient);
-      $p->setCreatedAt(new Date());
-      $p->setUpdatedAt(new Date());
-      $em->persist($p);
+      $appointement->setPatient($patient);
+      $appointement->setCreatedAt(new Date());
+      $appointement->setUpdatedAt(new Date());
+      $em->persist($appointement);
       $em->flush();
 
       $this->addFlash('success', "Appointement added  for '{$patient->getFirstName()} {$patient->getLastName()}'!");
-      return $this->redirectToRoute('app_appointements');
+      return $this->redirectToRoute('app_patients');
     }
 
     return $this->render('appointement/add.twig', [

@@ -1,34 +1,47 @@
-{% extends "base.html.twig" %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Appointement/Edit
+{% block title %}MedicalRecord/Add
 {% endblock %}
+
 {% block body %}
 	<div class="container py-5">
 		<div class="row justify-content-center">
 			<div class="col-md-6">
 				<div class="card rounded-4 overflow-hidden">
 					<div class="card-header" style="background-color: #1c274c">
-						<h4 class="mb-0 text-center text-white">Edit Appointement for
-							<span class="text-success">"{{appointement.patient.firstName ~ " " ~ appointement.patient.lastName}}"</span>
+						<h4 class="mb-0 text-center text-white">Add Medical Record for
+							<span class="text-success">"{{patient.firstName ~ " " ~ patient.lastName}}"</span>
 						</h4>
 					</div>
 					<div class="card-body">
 						{{ form_start(form) }}
 						<div class="form-floating mb-3">
-							{{ form_widget(form.date) }}
+							{{ form_widget(form.title) }}
 							<label for="">
-								Appointement Date
+								Title
 								<span class="text-danger fw-bold">
 									*
-									{% if form.date.vars.errors|length > 0 %}
-										{{ form.date.vars.errors[0].message }}
+									{% if form.title.vars.errors|length > 0 %}
+										{{ form.title.vars.errors[0].message }}
+									{% endif %}
+								</span>
+							</label>
+						</div>
+						<div class="form-floating mb-3">
+							{{ form_widget(form.description) }}
+							<label for="">
+								Description
+								<span class="text-danger fw-bold">
+									*
+									{% if form.description.vars.errors|length > 0 %}
+										{{ form.description.vars.errors[0].message }}
 									{% endif %}
 								</span>
 							</label>
 						</div>
 						<div class="text-center">
 							<button type="submit" class="btn btn-success border-0 rounded-pill px-5 fw-medium dark-blue">
-								Edit
+								Add
 							</button>
 						</div>
 						{{ form_end(form) }}

@@ -52,9 +52,23 @@ class Patient
   #[Rule\NotBlank(message: "Required")]
   private ?string $phone = null;
 
+  /**
+   * @var Collection<int, MedicalRecord>
+   */
+  #[ORM\OneToMany(targetEntity: MedicalRecord::class, mappedBy: 'patient', orphanRemoval: true)]
+  private Collection $medicalRecords;
+
+  /**
+   * @var Collection<int, Prescription>
+   */
+  #[ORM\OneToMany(targetEntity: Prescription::class, mappedBy: 'patient', orphanRemoval: true)]
+  private Collection $prescriptions;
+
   public function __construct()
   {
     $this->appointements = new ArrayCollection();
+    $this->medicalRecords = new ArrayCollection();
+    $this->prescriptions = new ArrayCollection();
   }
 
   public function getId(): ?int
@@ -174,5 +188,65 @@ class Patient
     $this->phone = $phone;
 
     return $this;
+  }
+
+  /**
+   * @return Collection<int, MedicalRecord>
+   */
+  public function getMedicalRecords(): Collection
+  {
+      return $this->medicalRecords;
+  }
+
+  public function addMedicalRecord(MedicalRecord $medicalRecord): static
+  {
+      if (!$this->medicalRecords->contains($medicalRecord)) {
+          $this->medicalRecords->add($medicalRecord);
+          $medicalRecord->setPatient($this);
+      }
+
+      return $this;
+  }
+
+  public function removeMedicalRecord(MedicalRecord $medicalRecord): static
+  {
+      if ($this->medicalRecords->removeElement($medicalRecord)) {
+          // set the owning side to null (unless already changed)
+          if ($medicalRecord->getPatient() === $this) {
+              $medicalRecord->setPatient(null);
+          }
+      }
+
+      return $this;
+  }
+
+  /**
+   * @return Collection<int, Prescription>
+   */
+  public function getPrescriptions(): Collection
+  {
+      return $this->prescriptions;
+  }
+
+  public function addPrescription(Prescription $prescription): static
+  {
+      if (!$this->prescriptions->contains($prescription)) {
+          $this->prescriptions->add($prescription);
+          $prescription->setPatient($this);
+      }
+
+      return $this;
+  }
+
+  public function removePrescription(Prescription $prescription): static
+  {
+      if ($this->prescriptions->removeElement($prescription)) {
+          // set the owning side to null (unless already changed)
+          if ($prescription->getPatient() === $this) {
+              $prescription->setPatient(null);
+          }
+      }
+
+      return $this;
   }
 }

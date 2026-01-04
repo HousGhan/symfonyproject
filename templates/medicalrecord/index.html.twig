@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MedicalRecords
+{% endblock %}
+
+{% block body %}
+	<h1 class="text-center">Medical Records</h1>
+	<form action="{{path("app_medicalrecords")}}" method="get" class="my-3">
+		<div class="input-group">
+			<input type="search" name='search' class="form-control rounded-4 rounded-end-0" placeholder="Search patient by CIN(advised), Name...">
+			<button type="submit" class='btn border-0 dark-blue rounded-start-0'>Search</button>
+		</div>
+	</form>
+	{% if medicalRecords|length > 0 %}
+		{% embed "layouts/table.twig" %}
+			{% block thead %}
+				<th class="dark-blue">Patient</th>
+				<th class="dark-blue">Title</th>
+				<th class="dark-blue">Description</th>
+			{% endblock %}
+			{% block tbody %}
+				{% for medicalRecord in medicalRecords %}
+					<tr class="table-light fw-medium">
+						<td>{{medicalRecord.patient.firstName ~ " " ~ medicalRecord.patient.lastName ~ "(" ~ medicalRecord.patient.cin ~ ")"}}</td>
+						<td>{{medicalRecord.title}}</td>
+						<td>{{medicalRecord.description}}</td>
+						<td class="align-middle">
+							<div class="d-flex justify-content-evenly align-items-center gap-2">
+								<a href="{{ path('medicalrecord_edit', { id: medicalRecord.id }) }}" class="btn p-0 border-0" data-bs-toggle="tooltip" title="Edit medicalRecord">
+									<img src="{{ asset('svgs/edit.svg') }}" alt="Edit">
+								</a>
+								<form method="post" action="{{ path('medicalrecord_delete', { id: medicalRecord.id }) }}" onsubmit="return confirm('Delete Medical Record For {{ medicalRecord.patient.cin }}?');">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete_medicalrecord_' ~ medicalRecord.id) }}">
+									<button type="submit" class="btn p-0 border-0" data-bs-toggle="tooltip" title="Cancel medicalRecord">
+										<img src="{{ asset('svgs/delete.svg') }}" alt="Delete">
+									</button>
+								</form>
+							</div>
+						</td>
+					</tr>
+				{% endfor %}
+			{% endblock %}
+		{% endembed %}
+	{% else %}
+		<h1 class="text-center">No results</h1>
+	{% endif %}
+{% endblock %}

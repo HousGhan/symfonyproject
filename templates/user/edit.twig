@@ -50,7 +50,7 @@
 								</span>
 							</label>
 						</div>
-						<div class="form-floating mb-3">
+						<div class="form-floating mb-3 position-relative">
 							{{ form_widget(form.password) }}
 							<label for="">
 								Password
@@ -61,6 +61,9 @@
 									{% endif %}
 								</span>
 							</label>
+							<button type="button" class="border-0 p-0 show-password btn top-0 my-2 end-0 mx-3 position-absolute">
+								<img src="{{asset("svgs/eye.svg")}}" alt="">
+							</button>
 						</div>
 						<div class="mb-3">
 							<label for="">

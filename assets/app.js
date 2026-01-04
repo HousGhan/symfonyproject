@@ -15,11 +15,10 @@ document.addEventListener("click", (event) => {
     const navLinksLabel = document.querySelectorAll(".nav-link span");
     navLinksLabel.forEach((label) => label.classList.toggle("d-none"));
   }
+  const showPasswordBtn = event.target.closest(".show-password");
+  const passwordInput = document.querySelector("[type='password']");;
+  showPasswordBtn.addEventListener("click", () => {
+    passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+  });
 });
 
-const tooltipTriggerList = document.querySelectorAll(
-  '[data-bs-toggle="tooltip"]'
-);
-const tooltipList = [...tooltipTriggerList].map(
-  (el) => new bootstrap.Tooltip(el)
-);

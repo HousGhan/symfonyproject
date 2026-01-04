@@ -12,18 +12,22 @@ use App\Form\UserType;
 use App\Repository\UserRepository;
 use DateTimeImmutable as Date;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 final class UserController extends AbstractController
 {
   #[Route('/users', name: 'app_users')]
-  public function index(UserRepository $ur): Response
+  #[IsGranted('ROLE_DOCTOR')]
+  public function index(UserRepository $ur,Request $request): Response
   {
-    $users = $ur->findAll();
+    $users = $ur->search($request->query->get('search'));
     // dd($users);
     return $this->render('user/index.html.twig', compact('users'));
   }
 
   #[Route('/users/add', name: 'user_add')]
+  #[IsGranted('ROLE_DOCTOR')]
   public function create(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher): Response
   {
     $user = new User();
@@ -52,6 +56,7 @@ final class UserController extends AbstractController
   }
 
   #[Route('/users/{id}/edit', name: 'user_edit')]
+  #[IsGranted('ROLE_DOCTOR')]
   public function edit(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher, User $user)
   {
     $form = $this->createForm(UserType::class, $user, [
@@ -78,6 +83,7 @@ final class UserController extends AbstractController
   }
 
   #[Route('/users/{id}/delete', name: 'user_delete')]
+  #[IsGranted('ROLE_DOCTOR')]
   public function delete(Request $request, EntityManagerInterface $em, User $user)
   {
     if ($this->isCsrfTokenValid('delete_user_' . $user->getId(), $request->request->get('_token'))) {
