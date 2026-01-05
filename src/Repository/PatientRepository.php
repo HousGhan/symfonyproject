@@ -16,14 +16,17 @@ class PatientRepository extends ServiceEntityRepository
     parent::__construct($registry, Patient::class);
   }
 
-  public function search($value = null): array
+  public function search($value = null, $order = "createdAt-DESC"): array
   {
+    $order = $order ?: "createdAt-DESC";
+    [$col, $direction] = explode("-", $order);
     return $this->createQueryBuilder('p')
       ->where('p.cin LIKE :value')
       ->orWhere('p.firstName LIKE :value')
       ->orWhere('p.lastName LIKE :value')
       ->orWhere('p.phone LIKE :value')
       ->setParameter('value', "%$value%")
+      ->orderBy("p.$col", $direction)
       ->getQuery()
       ->getResult()
     ;

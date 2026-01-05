@@ -19,9 +19,9 @@ final class UserController extends AbstractController
 {
   #[Route('/users', name: 'app_users')]
   #[IsGranted('ROLE_DOCTOR')]
-  public function index(UserRepository $ur,Request $request): Response
+  public function index(UserRepository $ur, Request $request): Response
   {
-    $users = $ur->search($request->query->get('search'));
+    $users = $ur->search($request->query->get('search'), $request->query->get('orderby'));
     // dd($users);
     return $this->render('user/index.html.twig', compact('users'));
   }

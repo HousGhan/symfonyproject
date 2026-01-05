@@ -19,7 +19,7 @@ final class AppointementController extends AbstractController
   #[Route('/appointements', name: 'app_appointements')]
   public function index(AppointementRepository $ar, Request $request): Response
   {
-    $appointements = $ar->search($request->query->get('search'));
+    $appointements = $ar->search($request->query->get('search'), $request->query->get('orderby'));
     // dd($appointements);
     return $this->render('appointement/index.html.twig', compact('appointements'));
   }

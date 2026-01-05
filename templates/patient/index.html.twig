@@ -10,12 +10,7 @@
 			<img src="{{asset("svgs/add.svg")}}" alt="">
 		</a>
 	</div>
-	<form action="{{path("app_patients")}}" method="get" class="my-3">
-		<div class="input-group">
-			<input type="search" name='search' class="form-control rounded-4 rounded-end-0" placeholder="Search patient by CIN(advised), Name...">
-			<button type="submit" class='btn border-0 dark-blue rounded-start-0'>Search</button>
-		</div>
-	</form>
+	{% include "layouts/form.twig" with {pathname:"patients"} %}
 	{% if patients|length > 0 %}
 		{% embed "layouts/table.twig" %}
 			{% block thead %}
@@ -26,6 +21,7 @@
 				{% if is_granted("ROLE_DOCTOR") %}
 					<th class="dark-blue">Created By</th>
 				{% endif %}
+				<th class="dark-blue">Created At</th>
 			{% endblock %}
 			{% block tbody %}
 				{% for patient in patients %}
@@ -37,6 +33,7 @@
 						{% if is_granted("ROLE_DOCTOR") %}
 							<td>{{patient.createdBy|default("Unknown")}}</td>
 						{% endif %}
+						<td>{{patient.createdAt|date("D, d M Y H:i A")}}</td>
 						<td class="align-middle">
 							<div class="d-flex justify-content-evenly gap-3 align-items-center">
 								<a href="{{path("appointement_add",{id:patient.id})}}" class="btn p-0 border-0" title="Add Appointement">

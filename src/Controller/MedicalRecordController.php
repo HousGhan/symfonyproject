@@ -19,7 +19,7 @@ final class MedicalRecordController extends AbstractController
   #[Route(name: 'app_medicalrecords')]
   public function index(MedicalRecordRepository $mrr, Request $request): Response
   {
-    $medicalRecords = $mrr->search($request->query->get('search'));
+    $medicalRecords = $mrr->search($request->query->get('search'),$request->query->get('orderby'));
     return $this->render('medicalrecord/index.html.twig', [
       'medicalRecords' => $medicalRecords,
     ]);

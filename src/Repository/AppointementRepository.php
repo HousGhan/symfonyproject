@@ -15,16 +15,30 @@ class AppointementRepository extends ServiceEntityRepository
   {
     parent::__construct($registry, Appointement::class);
   }
-  
-  public function search($value = null)
+
+  public function search($value = null, $order = "date-DESC")
   {
-    return $this->createQueryBuilder('a')
-      ->join('a.patient', 'p')
-      ->where('p.cin LIKE :value')
-      ->orWhere('p.firstName LIKE :value')
-      ->orWhere('p.lastName LIKE :value')
-      ->setParameter('value', "%$value%")
-      ->orderBy('a.date', 'DESC')
+    $order = $order ?: "date-DESC";
+    [$col, $direction] = explode('-', $order);
+
+    $qb = $this->createQueryBuilder('a')
+      ->join('a.patient', 'p');
+
+    if (!empty($value)) {
+      $qb->andWhere(
+        $qb->expr()->orX(
+          'p.cin LIKE :value',
+          'p.firstName LIKE :value',
+          'p.lastName LIKE :value'
+        )
+      )
+        ->setParameter('value', "%$value%");
+    }
+
+    $table = in_array($col, ['cin', 'firstName', 'lastName']) ? 'p' : 'a';
+
+    return $qb
+      ->orderBy("$table.$col", $direction)
       ->getQuery()
       ->getResult();
   }

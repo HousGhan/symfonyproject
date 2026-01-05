@@ -23,6 +23,7 @@ class PrescriptionRepository extends ServiceEntityRepository
       ->where('p.cin LIKE :value')
       ->orWhere('p.firstName LIKE :value')
       ->orWhere('p.lastName LIKE :value')
+      ->orWhere('pr.medicaments LIKE :value')
       ->setParameter('value', "%$value%")
       ->orderBy("pr.createdAt", "DESC")
       ->getQuery()

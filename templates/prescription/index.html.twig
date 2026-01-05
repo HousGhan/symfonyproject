@@ -5,30 +5,27 @@
 
 {% block body %}
 	<h1 class="text-center">Prescriptions</h1>
-	<form action="{{path("app_prescriptions")}}" method="get" class="my-3">
-		<div class="input-group">
-			<input type="search" name='search' class="form-control rounded-4 rounded-end-0" placeholder="Search patient by CIN(advised), Name...">
-			<button type="submit" class='btn border-0 dark-blue rounded-start-0'>Search</button>
-		</div>
-	</form>
+	{% include "layouts/form.twig" with {pathname:"prescriptions"} %}
 	{% if prescriptions|length > 0 %}
 		{% embed "layouts/table.twig" %}
 			{% block thead %}
 				<th class="dark-blue">Patient</th>
 				<th class="dark-blue">Medicaments</th>
+				<th class="dark-blue">CreatedAt</th>
 			{% endblock %}
 			{% block tbody %}
 				{% for prescription in prescriptions %}
 					<tr class="table-light fw-medium">
 						<td>{{prescription.patient.firstName ~ " " ~ prescription.patient.lastName ~ "(" ~ prescription.patient.cin ~ ")"}}</td>
 						<td>
-            {# {{prescription.medicaments}} #}
+							{# {{prescription.medicaments}} #}
 							<ul>
 								{% for med in prescription.parsed %}
 									<li>{{med}}</li>
 								{% endfor %}
 							</ul>
 						</td>
+						<td>{{prescription.createdAt|date("D, d M Y H:i A")}}</td>
 						<td class="align-middle">
 							<div class="d-flex justify-content-evenly align-items-center gap-2">
 								<a href="{{ path('generate_pdf', { id: prescription.id }) }}" class="btn p-0 border-0" data-bs-toggle="tooltip" title="Print prescription">

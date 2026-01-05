@@ -10,14 +10,8 @@
 			<img src="{{asset("svgs/add.svg")}}" alt="">
 		</a>
 	</div>
-	<form action="{{path("app_users")}}" method="get" class="my-3">
-		<div class="input-group">
-			<input type="search" name='search' class="form-control rounded-4 rounded-end-0" placeholder="Search patient by CIN(advised), Name...">
-			<button type="submit" class='btn border-0 dark-blue rounded-start-0'>Search</button>
-		</div>
-	</form>
+	{% include "layouts/form.twig" with {pathname:"users"} %}
 	{% if users|length > 0 %}
-
 		{% embed "layouts/table.twig" %}
 			{% block thead %}
 				<th class="dark-blue">First Name</th>

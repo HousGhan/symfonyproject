@@ -5,12 +5,7 @@
 
 {% block body %}
 	<h1 class="text-center">Appointements</h1>
-	<form action="{{path("app_appointements")}}" method="get" class="my-3">
-		<div class="input-group">
-			<input type="search" name='search' class="form-control rounded-4 rounded-end-0" placeholder="Search patient by CIN(advised), Name...">
-			<button type="submit" class='btn border-0 dark-blue rounded-start-0'>Search</button>
-		</div>
-	</form>
+	{% include "layouts/form.twig" with {pathname:"appointements"} %}
 	{% if appointements|length > 0 %}
 		{% embed "layouts/table.twig" %}
 			{% block thead %}

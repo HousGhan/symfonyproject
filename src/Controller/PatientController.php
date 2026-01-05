@@ -13,19 +13,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use DateTimeImmutable as Date;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-
+#[Route("/patients")]
 final class PatientController extends AbstractController
 {
-  #[Route('/patients', name: 'app_patients')]
+  #[Route(name: 'app_patients')]
   public function index(PatientRepository $pr, Request $request): Response
   {
     // $p = $pr->searchBy();
     // dd($request->query->get('search'));
-    $patients = $pr->search($request->query->get('search'));
+    $patients = $pr->search($request->query->get('search'), $request->query->get('orderby'));
     return $this->render('patient/index.html.twig', compact('patients'));
   }
 
-  #[Route('/patients/add', name: 'patient_add')]
+  #[Route('/add', name: 'patient_add')]
   public function create(Request $request, EntityManagerInterface $em)
   {
     $patient = new Patient();
@@ -53,7 +53,7 @@ final class PatientController extends AbstractController
     ]);
   }
 
-  #[Route('/patients/{id}/edit', name: 'patient_edit')]
+  #[Route('/{id}/edit', name: 'patient_edit')]
   public function edit(
     Request $request,
     Patient $patient,
@@ -83,7 +83,7 @@ final class PatientController extends AbstractController
     ]);
   }
 
-  #[Route('/patients/{id}/delete', name: 'patient_delete')]
+  #[Route('/{id}/delete', name: 'patient_delete')]
   public function delete(
     Request $request,
     Patient $patient,

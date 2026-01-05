@@ -28,7 +28,7 @@ final class PrescriptionController extends AbstractController
       ));
       $p->parsed = $rows;
       return $p;
-    }, $pr->search($request->query->get('search')));
+    }, $pr->search($request->query->get('search'), $request->query->get('orderby')));
     // dd($prescriptions);
     return $this->render('prescription/index.html.twig', [
       'prescriptions' => $prescriptions,
