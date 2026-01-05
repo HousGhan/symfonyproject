@@ -64,16 +64,18 @@ final class PrescriptionController extends AbstractController
   #[Route('/{id}/pdf', name: 'generate_pdf')]
   public function generatePdf(Prescription $prescription): Response
   {
+    $user = $this->getUser();
     $options = new Options();
     $options->set('defaultFont', 'Verdana');
     $dompdf = new Dompdf($options);
 
     $html = $this->renderView('prescription/pdf.twig', [
-      "prescription" => $prescription
+      "prescription" => $prescription,
+      "user" => $user
     ]);
 
     $dompdf->loadHtml($html);
-    $dompdf->setPaper('A5', 'portrait');
+    $dompdf->setPaper('A4', 'portrait');
     $dompdf->render();
 
     // Output the PDF to browser

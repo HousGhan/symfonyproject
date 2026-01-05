@@ -4,84 +4,149 @@
 		<meta charset="UTF-8">
 		<title>Prescription</title>
 
-		<style>
-			@page {
-				size: A5 portrait;
-				margin: 0;
-			}
+		<style>:root
+		{
+			--var-color: #ffffff;
+		}
 
-			* {
-				margin: 0;
-				padding: 0;
-				box-sizing: border-box;
-			}
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: Verdana, sans-serif;
+		}
 
-			html,
-			body {
-				height: 100%;
-			}
+		header {
+			background: #1c274c;
+			color: var(--var-color);
+			padding: 5px 15px;
+		}
 
-			body {
-				font-family: Arial, sans-serif;
-        display:flex ;
-			}
+		.medications {
+			margin: 2rem 0 0
+		}
 
-			header,
-			footer {
-				background: #1c274c;
-				color: #fff;
-				height: 10%;
-				padding: 15px;
-				/* position: fixed; */
-			}
-			header {
-				top: 0;
-				width: 100%
-			}
 
-			footer {
-				bottom: 0;
-				width: 100%
-			}
+		main {
+			padding: 20px;
+			height: 100vh position: relative;
+		}
 
-			main {
-				padding: 20px;
-        /* margin-top:7rem */
-				/* height: 67.4% */
-			}
-		</style>
-	</head>
+		.title {
+			text-align: center;
+			margin: 0
+		}
 
-	<body>
-		<header>
-			<h2>Medical Prescription</h2>
-		</header>
+		.infos-wrapper {
+			margin-top: 10px
+		}
 
-		<main>
-			<table>
-				<tr>
-					<td>sflkl:afk</td>
-					<td>sflkl:afk</td>
-					<td>sflkl:afk</td>
-				</tr>
-				<tr>
-					<td>sflkl:afk</td>
-					<td>sflkl:afk</td>
-					<td>sflkl:afk</td>
-				</tr>
-				<tr>
-					<td>sflkl:afk</td>
-					<td>sflkl:afk</td>
-					<td>sflkl:afk</td>
-				</tr>
-			</table>
-		</main>
+		ul {
+			margin: 10px 0;
+			padding-left: 20px;
+			list-style: disc;
+		}
 
-		<footer>
-			<p>Doctor Signature</p>
-			<p>Doctor Signature</p>
-			<p>Doctor Signature</p>
-			<p>Doctor Signature</p>
-		</footer>
-	</body>
-</html>
+		ul li {
+			margin: 15px;
+		}
+
+
+		.signature {
+			position: absolute;
+			bottom: 50px;
+			right: 50px;
+			font-size: 1.25rem;
+			font-weight: bold;
+			text-align: center;
+		}
+
+		.signature .date {
+			margin-bottom: 5px;
+			font-size: 1rem;
+		}
+
+		.patient {
+			text-align: center;
+		}
+
+		hr {
+			border: black solid;
+			margin-top: 3rem;
+			width: 200px;
+		}
+
+		table {
+			margin: 10px 0;
+			width: 100%
+		}
+
+		td {
+			vertical-align: middle
+		}
+
+		table,
+		td {
+			border-collapse: collapse;
+			/* outline: solid */
+		}
+
+		td.contacts {}
+
+		td.doctor {
+			width: 50%
+		}
+
+		td.contacts h3 {
+			margin: 10px 0
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<h1 class="title">Medical Prescription</h1>
+		<table>
+			<tr>
+				<td class="doctor">
+					<h2>
+						DR.
+						{{user.getFullname}}
+						<br>
+						Dermatologue
+					</h2>
+				</td>
+				<td class="contacts">
+					<h3>Phone: +212 578966247</h3>
+					<h3>Address: Lot Ghita Rue 15 N 12 Ain Chok Casablanca</h3>
+					<h3>Email:
+						{{user.email}}</h3>
+				</td>
+			</tr>
+		</table>
+	</header>
+	<main>
+		<h2 class="patient">Patient:
+			{{ prescription.patient.firstName }}
+			{{ prescription.patient.lastName }}
+		</h2>
+		{% set meds = prescription.medicaments|split('\n') %}
+		<h2 class="medications">Medications:
+		</h2>
+		<ul>
+			{% for med in meds %}
+				{% if med|trim %}
+					<li>
+						<h3>{{ med }}</h3>
+					</li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+		<div class="signature">
+			<div class="date">Date
+				{{ "now"|date("d/m/Y") }}</div>
+			<div>Signature</div>
+			<hr>
+		</div>
+	</main>
+</body></html>
