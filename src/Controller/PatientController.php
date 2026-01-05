@@ -19,8 +19,10 @@ final class PatientController extends AbstractController
   #[Route(name: 'app_patients')]
   public function index(PatientRepository $pr, Request $request): Response
   {
-    // $p = $pr->searchBy();
-    // dd($request->query->get('search'));
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
     $patients = $pr->search($request->query->get('search'), $request->query->get('orderby'));
     return $this->render('patient/index.html.twig', compact('patients'));
   }
@@ -28,6 +30,10 @@ final class PatientController extends AbstractController
   #[Route('/add', name: 'patient_add')]
   public function create(Request $request, EntityManagerInterface $em)
   {
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
     $patient = new Patient();
     $form = $this->createForm(PatientType::class, $patient, [
       'is_edit' => false
@@ -59,7 +65,10 @@ final class PatientController extends AbstractController
     Patient $patient,
     EntityManagerInterface $em
   ): Response {
-
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
     $form = $this->createForm(PatientType::class, $patient, [
       'is_edit' => true
     ]);
@@ -89,7 +98,10 @@ final class PatientController extends AbstractController
     Patient $patient,
     EntityManagerInterface $em
   ): Response {
-
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
     if ($this->isCsrfTokenValid('delete_patient_' . $patient->getId(), $request->request->get('_token'))) {
       $em->remove($patient);
       $em->flush();

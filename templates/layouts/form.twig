@@ -1,17 +1,25 @@
-<form action="{{path("app_" ~ pathname)}}" method="get" class="my-3 d-flex gap-3">
-	<div class="input-group">
-		<input type="search" name='search' class="form-control rounded-4 rounded-end-0" placeholder="Search patient by CIN(advised), Name...">
-		<select name='orderby' class="form-select rounded-start-0 rounded-end-0">
+<form action="{{path("app_" ~ pathname)}}" method="get" class="my-3">
+	<div class="d-flex flex-lg-row flex-column gap-3">
+		<input type="search" name='search' class="form-control rounded-4" placeholder="Search patient by CIN(advised), Name...">
+		<select name='orderby' class="form-select  rounded-4">
 			<option value="">Order by</option>
 			<option value="createdAt-DESC">Created At Latest</option>
 			<option value="createdAt-ASC">Created At Oldest</option>
-			<option value="cin-ASC">CIN A-Z</option>
-			<option value="cin-DESC">CIN Z-A</option>
+			{% if pathname != "users" %}
+				<option value="cin-ASC">CIN A-Z</option>
+				<option value="cin-DESC">CIN Z-A</option>
+			{% endif %}
 			<option value="firstName-ASC">First Name A-Z</option>
 			<option value="firstName-DESC">First Name Z-A</option>
 			<option value="lastName-ASC">Last Name A-Z</option>
 			<option value="lastName-DESC">Last Name Z-A</option>
 		</select>
-		<button type="submit" class='btn border-0 dark-blue rounded-start-0'>Apply</button>
+		{% if pathname == "appointements" %}
+			<div class="d-flex gap-3 flex-column flex-lg-row">
+				<input type="date" name='from' class="form-control rounded-4" title="from">
+				<input type="date" name='to' class="form-control rounded-4" title="to">
+			</div>
+		{% endif %}
+		<button type="submit" class='btn border-0 dark-blue rounded-4'>Apply</button>
 	</div>
 </form>

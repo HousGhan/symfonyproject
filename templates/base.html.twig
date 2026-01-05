@@ -65,9 +65,9 @@
 			</ul>
 			<ul class="navbar-nav w-100">
 				<li class="nav-item position-relative px-2" title="Dahsboard">
-					<button class="nav-link px-2 stretched-link d-flex align-items-center gap-2" data-bs-target="#settingsModal" data-bs-toggle="modal" type="button">
+					<a class="nav-link px-2 rounded-4 stretched-link d-flex align-items-center gap-2 {{page == "app_settings" ? " bg-dark-subtle" : " "}}" href="{{path("app_settings")}}">
 						<img src="{{asset("svgs/settings.svg")}}" alt=""><span class="fw-bold d-none fs-5">Settings</span>
-					</button>
+					</a>
 				</li>
 				<li class="nav-item position-relative px-2 ">
 					<a href="{{logout_path()}}" class="nav-link px-2 stretched-link d-flex align-items-center gap-2">
@@ -77,20 +77,6 @@
 				</li>
 			</ul>
 		</nav>
-		<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content bg-dark bg-opacity-50 shadow rounded-4">
-					<div class="modal-header border-0">
-						<h1 class="modal-title fs-4 text-white" id="settingsModalLabel">Settings</h1>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body border-0"></div>
-					<div class="modal-footer border-0 justify-content-center">
-						<button type="button" class="btn btn-primary border-0 dark-blue px-5 rounded-pill">Save</button>
-					</div>
-				</div>
-			</div>
-		</div>
 		<main class="flex-fill overflow-y-auto">
 			<div class="d-flex justify-content-center align-items-center mb-3">
 				<span class="p-3 rounded-bottom-5 py-2 fw-medium text-white dark-blue">

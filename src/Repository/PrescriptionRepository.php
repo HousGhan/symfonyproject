@@ -16,18 +16,27 @@ class PrescriptionRepository extends ServiceEntityRepository
     parent::__construct($registry, Prescription::class);
   }
 
-  public function search($value = null): array
+  public function search($value = null,  $order = null): array
   {
-    return $this->createQueryBuilder('pr')
-      ->join('pr.patient', 'p')
-      ->where('p.cin LIKE :value')
-      ->orWhere('p.firstName LIKE :value')
-      ->orWhere('p.lastName LIKE :value')
-      ->orWhere('pr.medicaments LIKE :value')
-      ->setParameter('value', "%$value%")
-      ->orderBy("pr.createdAt", "DESC")
+    $order = $order ?: 'createdAt-DESC';
+    [$col, $direction] = explode('-', $order);
+
+    $qb = $this->createQueryBuilder('pr')
+      ->join('pr.patient', 'p');
+
+    if (!empty($value)) {
+      $qb->where('p.cin LIKE :value')
+        ->orWhere('p.firstName LIKE :value')
+        ->orWhere('p.lastName LIKE :value')
+        ->orWhere('pr.medicaments LIKE :value')
+        ->setParameter('value', "%$value%");
+    }
+
+    $table = in_array($col, ['cin', 'firstName', 'lastName']) ? 'p' : 'pr';
+
+    return $qb
+      ->orderBy("$table.$col", $direction)
       ->getQuery()
-      ->getResult()
-    ;
+      ->getResult();
   }
 }

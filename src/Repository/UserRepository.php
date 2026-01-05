@@ -33,14 +33,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     $this->getEntityManager()->flush();
   }
 
-  public function search($value = null)
+  public function search($value = null, $order = null)
   {
-    return $this->createQueryBuilder('u')
-      ->where('u.email LIKE :value')
-      ->orWhere('u.firstName LIKE :value')
-      ->orWhere('u.lastName LIKE :value')
-      ->setParameter('value', "%$value%")
-      ->orderBy('u.createdAt', 'DESC')
+    $order = $order ?: 'createdAt-DESC';
+    [$col, $direction] = explode('-', $order);
+
+    $qb = $this->createQueryBuilder('u');
+
+    if (!empty($value)) {
+      $qb->where('u.email LIKE :value')
+        ->orWhere('u.firstName LIKE :value')
+        ->orWhere('u.lastName LIKE :value')
+        ->setParameter('value', "%$value%");
+    }
+
+    return $qb
+      ->orderBy("u.$col", $direction)
       ->getQuery()
       ->getResult();
   }

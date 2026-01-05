@@ -14,6 +14,7 @@ use App\Repository\PrescriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\PrescriptionType;
 use DateTimeImmutable as Date;
+use App\Repository\SettingsRepository;
 
 #[Route('/prescriptions')]
 final class PrescriptionController extends AbstractController
@@ -21,6 +22,10 @@ final class PrescriptionController extends AbstractController
   #[Route(name: 'app_prescriptions')]
   public function index(PrescriptionRepository $pr, Request $request): Response
   {
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
     $prescriptions = array_map(function ($p) {
       $rows = array_values(array_filter(
         array_map('trim', explode("\n", $p->getMedicaments())),
@@ -38,6 +43,10 @@ final class PrescriptionController extends AbstractController
   #[Route('/{id}/add', name: 'prescription_add')]
   public function new(Request $request, EntityManagerInterface $em, Patient $patient): Response
   {
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
     $prescription = new Prescription();
     $form = $this->createForm(PrescriptionType::class, $prescription, [
       'is_edit' => false
@@ -62,8 +71,13 @@ final class PrescriptionController extends AbstractController
   }
 
   #[Route('/{id}/pdf', name: 'generate_pdf')]
-  public function generatePdf(Prescription $prescription): Response
+  public function generatePdf(Prescription $prescription, SettingsRepository $sr): Response
   {
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
+    $settings = $sr->find(1);
     $user = $this->getUser();
     $options = new Options();
     $options->set('defaultFont', 'Verdana');
@@ -71,7 +85,8 @@ final class PrescriptionController extends AbstractController
 
     $html = $this->renderView('prescription/pdf.twig', [
       "prescription" => $prescription,
-      "user" => $user
+      "user" => $user,
+      "settings" => $settings,
     ]);
 
     $dompdf->loadHtml($html);
@@ -92,6 +107,10 @@ final class PrescriptionController extends AbstractController
   #[Route('/{id}/edit', name: 'prescription_edit')]
   public function edit(Request $request, Prescription $prescription, EntityManagerInterface $em): Response
   {
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
     $form = $this->createForm(PrescriptionType::class, $prescription, [
       'is_edit' => true
     ]);
@@ -114,6 +133,10 @@ final class PrescriptionController extends AbstractController
   #[Route('/{id}', name: 'prescription_delete')]
   public function delete(Request $request, Prescription $prescription, EntityManagerInterface $em): Response
   {
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
     if ($this->isCsrfTokenValid('delete_prescription_' . $prescription->getId(), $request->request->get('_token'))) {
       $em->remove($prescription);
       $em->flush();

@@ -19,7 +19,11 @@ final class MedicalRecordController extends AbstractController
   #[Route(name: 'app_medicalrecords')]
   public function index(MedicalRecordRepository $mrr, Request $request): Response
   {
-    $medicalRecords = $mrr->search($request->query->get('search'),$request->query->get('orderby'));
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
+    $medicalRecords = $mrr->search($request->query->get('search'), $request->query->get('orderby'));
     return $this->render('medicalrecord/index.html.twig', [
       'medicalRecords' => $medicalRecords,
     ]);
@@ -28,6 +32,10 @@ final class MedicalRecordController extends AbstractController
   #[Route('/{id}/add', name: 'medicalrecord_add')]
   public function new(Request $request, EntityManagerInterface $em, Patient $patient): Response
   {
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
     $medicalRecord = new MedicalRecord();
     $form = $this->createForm(MedicalRecordType::class, $medicalRecord, [
       'is_edit' => false
@@ -53,6 +61,10 @@ final class MedicalRecordController extends AbstractController
   #[Route('/{id}/edit', name: 'medicalrecord_edit')]
   public function edit(Request $request, MedicalRecord $medicalRecord, EntityManagerInterface $em): Response
   {
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
     $form = $this->createForm(MedicalRecordType::class, $medicalRecord, [
       'is_edit' => true
     ]);
@@ -75,6 +87,10 @@ final class MedicalRecordController extends AbstractController
   #[Route('/{id}', name: 'medicalrecord_delete')]
   public function delete(Request $request, MedicalRecord $medicalRecord, EntityManagerInterface $em): Response
   {
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
     if ($this->isCsrfTokenValid('delete_medicalrecord_' . $medicalRecord->getId(), $request->request->get('_token'))) {
       $em->remove($medicalRecord);
       $em->flush();

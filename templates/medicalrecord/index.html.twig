@@ -12,6 +12,7 @@
 				<th class="dark-blue">Patient</th>
 				<th class="dark-blue">Title</th>
 				<th class="dark-blue">Description</th>
+				<th class="dark-blue">Created At</th>
 			{% endblock %}
 			{% block tbody %}
 				{% for medicalRecord in medicalRecords %}
@@ -19,8 +20,10 @@
 						<td>{{medicalRecord.patient.firstName ~ " " ~ medicalRecord.patient.lastName ~ "(" ~ medicalRecord.patient.cin ~ ")"}}</td>
 						<td>{{medicalRecord.title}}</td>
 						<td>{{medicalRecord.description}}</td>
+						<td>{{medicalRecord.createdAt|date("D, d M Y H:i A")}}</td>
+
 						<td class="align-middle">
-							<div class="d-flex justify-content-evenly align-items-center gap-2">
+							<div class="d-flex justify-content-evenly align-items-center gap-3">
 								<a href="{{ path('medicalrecord_edit', { id: medicalRecord.id }) }}" class="btn p-0 border-0" data-bs-toggle="tooltip" title="Edit medicalRecord">
 									<img src="{{ asset('svgs/edit.svg') }}" alt="Edit">
 								</a>

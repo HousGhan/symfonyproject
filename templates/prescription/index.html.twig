@@ -27,7 +27,7 @@
 						</td>
 						<td>{{prescription.createdAt|date("D, d M Y H:i A")}}</td>
 						<td class="align-middle">
-							<div class="d-flex justify-content-evenly align-items-center gap-2">
+							<div class="d-flex justify-content-evenly align-items-center gap-3">
 								<a href="{{ path('generate_pdf', { id: prescription.id }) }}" class="btn p-0 border-0" data-bs-toggle="tooltip" title="Print prescription">
 									<img src="{{ asset('svgs/print.svg') }}" alt="Edit">
 								</a>

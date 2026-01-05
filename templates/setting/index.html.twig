@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Settings
+{% endblock %}
+
+{% block body %}
+	<div class="container py-5">
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+				<div class="card rounded-4 overflow-hidden">
+					<div class="card-header" style="background-color: #1c274c">
+						<h4 class="mb-0 text-center text-white">Settings</h4>
+					</div>
+					<div class="card-body">
+
+						{{ form_start(form) }}
+						<div class="form-floating mb-3">
+							{{ form_widget(form.cabinet) }}
+							<label for="">
+								Cabinet Name
+								{# <span class="text-danger fw-bold">
+									*
+									{% if form.cabinet.vars.errors|length > 0 %}
+										{{ form.cabinet.vars.errors[0].message }}
+									{% endif %}
+								</span> #}
+							</label>
+						</div>
+						<div class="form-floating mb-3">
+							{{ form_widget(form.specialty) }}
+							<label for="">
+								Doctor Specialty
+								{# <span class="text-danger fw-bold">
+									*
+									{% if form.specialty.vars.errors|length > 0 %}
+										{{ form.specialty.vars.errors[0].message }}
+									{% endif %}
+								</span> #}
+							</label>
+						</div>
+						<div class="form-floating mb-3">
+							{{ form_widget(form.limitAppointements) }}
+							<label for="">
+								Limit Appointements Per Day
+								<span class="text-danger fw-bold">
+									*
+									{% if form.limitAppointements.vars.errors|length > 0 %}
+										{{ form.limitAppointements.vars.errors[0].message }}
+									{% endif %}
+								</span>
+							</label>
+						</div>
+						<div class="form-floating mb-3">
+							{{ form_widget(form.email) }}
+							<label for="">
+								Cabinet Email
+								{# <span class="text-danger fw-bold">
+									*
+									{% if form.email.vars.errors|length > 0 %}
+										{{ form.email.vars.errors[0].message }}
+									{% endif %}
+								</span> #}
+							</label>
+						</div>
+						<div class="form-floating mb-3">
+							{{ form_widget(form.phone) }}
+							<label for="">
+								Phone Number
+								{# <span class="text-danger fw-bold">
+									*
+									{% if form.phone.vars.errors|length > 0 %}
+										{{ form.phone.vars.errors[0].message }}
+									{% endif %}
+								</span> #}
+							</label>
+						</div>
+						<div class="form-floating mb-3">
+							{{ form_widget(form.address) }}
+							<label for="">
+								Address
+								{# <span class="text-danger fw-bold">
+									*
+									{% if form.address.vars.errors|length > 0 %}
+										{{ form.address.vars.errors[0].message }}
+									{% endif %}
+								</span> #}
+							</label>
+						</div>
+						<div class="text-center">
+							<button type="submit" class="btn btn-success border-0 rounded-pill px-5 fw-medium dark-blue">
+								Save
+							</button>
+						</div>
+						{{ form_end(form) }}</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

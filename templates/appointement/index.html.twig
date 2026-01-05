@@ -11,14 +11,20 @@
 			{% block thead %}
 				<th class="dark-blue">Patient</th>
 				<th class="dark-blue">Appointement Date/Time</th>
+				<th class="dark-blue">Status</th>
+				<th class="dark-blue">Price Payed</th>
+				<th class="dark-blue">Payed</th>
 			{% endblock %}
 			{% block tbody %}
 				{% for appointement in appointements %}
 					<tr class="table-light fw-medium">
 						<td>{{appointement.patient.firstName ~ " " ~ appointement.patient.lastName ~ "(" ~ appointement.patient.cin ~ ")"}}</td>
 						<td>{{appointement.date|date("D, d M Y H:i A")}}</td>
+						<td>{{appointement.status|capitalize|default("Pending")}}</td>
+						<td>{{appointement.price}}</td>
+						<td>{{appointement.payed ? "Yes" : "No"}}</td>
 						<td class="align-middle">
-							<div class="d-flex justify-content-evenly align-items-center gap-2">
+							<div class="d-flex justify-content-evenly align-items-center gap-3">
 								<a href="{{ path('appointement_edit', { id: appointement.id }) }}" class="btn p-0 border-0" data-bs-toggle="tooltip" title="Edit appointement">
 									<img src="{{ asset('svgs/edit.svg') }}" alt="Edit">
 								</a>

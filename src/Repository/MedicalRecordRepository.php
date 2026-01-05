@@ -16,18 +16,27 @@ class MedicalRecordRepository extends ServiceEntityRepository
     parent::__construct($registry, MedicalRecord::class);
   }
 
-  public function search($value = null)
+  public function search($value = null,  $order = null)
   {
-    return $this->createQueryBuilder('md')
-      ->join('md.patient', 'p')
-      ->where('p.cin LIKE :value')
-      ->orWhere('p.firstName LIKE :value')
-      ->orWhere('p.lastName LIKE :value')
-      ->orWhere('md.title LIKE :value')
-      ->orWhere('md.description LIKE :value')
-      ->setParameter('value', "%$value%")
-      // ->orderBy('md.date', 'DESC')
-      ->getQuery()
-      ->getResult();
+    $order = $order ?: 'createdAt-DESC';
+    [$col, $direction] = explode('-', $order);
+
+    $query = $this->createQueryBuilder('md')
+      ->join('md.patient', 'p');
+
+    if (!empty($value)) {
+      $query->where('p.cin LIKE :value')
+        ->orWhere('p.firstName LIKE :value')
+        ->orWhere('p.lastName LIKE :value')
+        ->orWhere('md.title LIKE :value')
+        ->orWhere('md.description LIKE :value')
+        ->setParameter('value', "%$value%");
+    }
+
+    $table = in_array($col, ['cin', 'firstName', 'lastName']) ? 'p' : 'md';
+
+    $query->orderBy("$table.$col", $direction);
+
+    return $query->getQuery()->getResult();
   }
 }

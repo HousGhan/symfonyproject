@@ -26,6 +26,35 @@
 								</span>
 							</label>
 						</div>
+						<div class="form-floating mb-3">
+							{{ form_widget(form.status) }}
+							<label for="">
+								Appointement Status
+								<span class="text-danger fw-bold">
+									{% if form.status.vars.errors|length > 0 %}
+										{{ form.status.vars.errors[0].message }}
+									{% endif %}
+								</span>
+							</label>
+						</div>
+						<div class="form-floating mb-3">
+							{{ form_widget(form.price) }}
+							<label for="">
+								Price
+								<span class="text-danger fw-bold">
+									*
+									{% if form.price.vars.errors|length > 0 %}
+										{{ form.price.vars.errors[0].message }}
+									{% endif %}
+								</span>
+							</label>
+						</div>
+						<div class="form-check mb-3">
+							<label for="" class="form-check-label">
+							{{ form_widget(form.payed) }}
+								Payed?
+							</label>
+						</div>
 						<div class="text-center">
 							<button type="submit" class="btn btn-success border-0 rounded-pill px-5 fw-medium dark-blue">
 								Edit

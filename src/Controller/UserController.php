@@ -21,6 +21,10 @@ final class UserController extends AbstractController
   #[IsGranted('ROLE_DOCTOR')]
   public function index(UserRepository $ur, Request $request): Response
   {
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
     $users = $ur->search($request->query->get('search'), $request->query->get('orderby'));
     // dd($users);
     return $this->render('user/index.html.twig', compact('users'));
@@ -30,6 +34,10 @@ final class UserController extends AbstractController
   #[IsGranted('ROLE_DOCTOR')]
   public function create(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher): Response
   {
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
     $user = new User();
     $form = $this->createForm(UserType::class, $user, [
       'is_edit' => false
@@ -59,6 +67,10 @@ final class UserController extends AbstractController
   #[IsGranted('ROLE_DOCTOR')]
   public function edit(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher, User $user)
   {
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
     $form = $this->createForm(UserType::class, $user, [
       'is_edit' => true
     ]);
@@ -86,6 +98,10 @@ final class UserController extends AbstractController
   #[IsGranted('ROLE_DOCTOR')]
   public function delete(Request $request, EntityManagerInterface $em, User $user)
   {
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
     if ($this->isCsrfTokenValid('delete_user_' . $user->getId(), $request->request->get('_token'))) {
       $em->remove($user);
       $em->flush();

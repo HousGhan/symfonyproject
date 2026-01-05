@@ -113,14 +113,18 @@
 						DR.
 						{{user.getFullname}}
 						<br>
-						Dermatologue
+						{{settings.specialty}}
 					</h2>
 				</td>
 				<td class="contacts">
-					<h3>Phone: +212 578966247</h3>
-					<h3>Address: Lot Ghita Rue 15 N 12 Ain Chok Casablanca</h3>
+					<h3>Cabinet:
+						{{settings.cabinet}}</h3>
+					<h3>Phone: +212
+						{{settings.phone}}</h3>
+					<h3>Address:
+						{{settings.address}}</h3>
 					<h3>Email:
-						{{user.email}}</h3>
+						{{settings.email}}</h3>
 				</td>
 			</tr>
 		</table>

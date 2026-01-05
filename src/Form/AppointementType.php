@@ -6,6 +6,9 @@ use App\Entity\Appointement;
 use App\Entity\Patient;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -21,6 +24,31 @@ class AppointementType extends AbstractType
           'placeholder' => ' ',
         ],
       ]);
+    if ($options['is_edit']) {
+      $builder
+        ->add('status', ChoiceType::class, [
+          'choices' => [
+            'Pending' => 'pending',
+            'Confirmed'   => 'confirmed',
+          ],
+          'placeholder' => '  ',
+          'attr' => [
+            'class' => 'form-select',
+          ],
+        ])
+        ->add('price', NumberType::class, [
+          // "currency" => "",
+          'attr' => [
+            'class' => 'form-control',
+            'placeholder' => ' ',
+          ],
+        ])
+        ->add('payed', CheckboxType::class, [
+          'attr' => [
+            'class' => 'form-check-input',
+          ],
+        ]);
+    }
   }
 
   public function configureOptions(OptionsResolver $resolver): void
