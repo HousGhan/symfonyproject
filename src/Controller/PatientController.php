@@ -59,6 +59,12 @@ final class PatientController extends AbstractController
     ]);
   }
 
+  #[Route('/{id}')]
+  public function show(Patient $patient)
+  {
+    return $this->render("patients/show.html.twig");
+  }
+
   #[Route('/{id}/edit', name: 'patient_edit')]
   public function edit(
     Request $request,
