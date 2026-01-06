@@ -78,15 +78,13 @@ final class UserController extends AbstractController
     if ($form->isSubmitted() && $form->isValid()) {
       $user->setPassword($hasher->hashPassword($user, $form->get('password')->getData()));
       $user->setUpdatedAt(new Date());
-
-      $em->persist($user);
       $em->flush();
 
       $this->addFlash('success', 'User updated successfully!');
       return $this->redirectToRoute('app_users');
     }
 
-    return $this->render('user/add.twig', [
+    return $this->render('user/edit.twig', [
       'form' => $form,
     ]);
   }
