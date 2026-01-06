@@ -21,7 +21,7 @@
 					<tr class="table-light fw-medium">
 						<td>{{appointement.patient.firstName ~ " " ~ appointement.patient.lastName ~ "(" ~ appointement.patient.cin ~ ")"}}</td>
 						<td>{{appointement.date|date("D, d M Y H:i A")}}</td>
-						<td>{{appointement.status|capitalize|default("Pending")}}</td>
+						<td>{{appointement.status|capitalize}}</td>
 						<td>{{appointement.price|default(0)}}</td>
 						<td>{{appointement.payed ? "Yes" : "No"}}</td>
 						<td>{{appointement.createdAt|date("D, d M Y H:i A")}}</td>

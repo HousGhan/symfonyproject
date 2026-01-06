@@ -1,10 +1,15 @@
-<form action="{{path("app_" ~ pathname)}}" method="get" class="my-3">
+<form action="{{path("app_" ~ pathname)}}" method="get" class="my-4">
 	<div class="d-flex flex-lg-row flex-column gap-3">
 		<input type="search" name='search' class="form-control rounded-4" placeholder="Search patient by CIN(advised), Name...">
 		<select name='orderby' class="form-select  rounded-4">
 			<option value="">Order by</option>
+			{% if pathname == "appointements" %}
+				<option value="date-DESC">Appointement Date Latest</option>
+				<option value="date-ASC">Appointement Date Oldest</option>
+			{% endif %}
 			<option value="createdAt-DESC">Created At Latest</option>
 			<option value="createdAt-ASC">Created At Oldest</option>
+
 			{% if pathname != "users" %}
 				<option value="cin-ASC">CIN A-Z</option>
 				<option value="cin-DESC">CIN Z-A</option>

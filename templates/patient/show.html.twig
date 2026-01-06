@@ -1,9 +1,169 @@
-{# templates/patient/new.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Patient/Show
 {% endblock %}
-  {{patient.firstName}}
 {% block body %}
-	
+	<h1 class="text-center">{{patient.firstName}}
+		{{patient.lastName}}</h1>
+	<div class="accordion d-flex flex-column gap-4 my-5" id="accordionExample">
+		<div class="accordion-item overflow-hidden rounded-5">
+			<h2 class="accordion-header" id="headingOne">
+				<button class="accordion-button fs-3 fw-medium bg-primary-subtle collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+					Appointements
+				</button>
+			</h2>
+			<div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+				<div class="accordion-body">
+					{% if patient.appointements|length > 0 %}
+						{% embed "layouts/table.twig" %}
+							{% block thead %}
+								<th class="dark-blue">Patient</th>
+								<th class="dark-blue">Appointement Date/Time</th>
+								<th class="dark-blue">Status</th>
+								<th class="dark-blue">Price Payed(DHS)</th>
+								<th class="dark-blue">Payed</th>
+								<th class="dark-blue">Created At</th>
+							{% endblock %}
+							{% block tbody %}
+								{% for appointement in patient.appointements %}
+									<tr class="table-light fw-medium">
+										<td>{{appointement.patient.firstName ~ " " ~ appointement.patient.lastName ~ "(" ~ appointement.patient.cin ~ ")"}}</td>
+										<td>{{appointement.date|date("D, d M Y H:i A")}}</td>
+										<td>{{appointement.status|capitalize|default("Pending")}}</td>
+										<td>{{appointement.price|default(0)}}</td>
+										<td>{{appointement.payed ? "Yes" : "No"}}</td>
+										<td>{{appointement.createdAt|date("D, d M Y H:i A")}}</td>
+										<td class="align-middle">
+											<div class="d-flex justify-content-evenly align-items-center gap-3">
+												<a href="{{ path('appointement_edit', { id: appointement.id }) }}" class="btn p-0 border-0" data-bs-toggle="tooltip" title="Edit appointement">
+													<img src="{{ asset('svgs/edit.svg') }}" alt="Edit">
+												</a>
+												<form method="post" action="{{ path('appointement_delete', { id: appointement.id }) }}" onsubmit="return confirm('Cancel appointement {{ appointement.patient.cin }}?');">
+													<input type="hidden" name="_token" value="{{ csrf_token('delete_appointement_' ~ appointement.id) }}">
+													<button type="submit" class="btn p-0 border-0" data-bs-toggle="tooltip" title="Cancel appointement">
+														<img src="{{ asset('svgs/delete.svg') }}" alt="Delete">
+													</button>
+												</form>
+											</div>
+										</td>
+									</tr>
+								{% endfor %}
+							{% endblock %}
+						{% endembed %}
+					{% else %}
+						<h1 class="text-center">No Appointements</h1>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+      {% if is_granted("ROLE_DOCTOR") %}
+		<div class="accordion-item overflow-hidden rounded-5">
+			<h2 class="accordion-header" id="headingTwo">
+				<button class="accordion-button fs-3 fw-medium bg-primary-subtle collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+					Medical Record
+				</button>
+			</h2>
+			<div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+				<div class="accordion-body">
+					{% if patient.medicalRecords|length > 0 %}
+						{% embed "layouts/table.twig" %}
+							{% block thead %}
+								<th class="dark-blue">Patient</th>
+								<th class="dark-blue">Title</th>
+								<th class="dark-blue">Description</th>
+								<th class="dark-blue">Created At</th>
+							{% endblock %}
+							{% block tbody %}
+								{% for medicalRecord in patient.medicalRecords %}
+									<tr class="table-light fw-medium">
+										<td>{{medicalRecord.patient.firstName ~ " " ~ medicalRecord.patient.lastName ~ "(" ~ medicalRecord.patient.cin ~ ")"}}</td>
+										<td>{{medicalRecord.title}}</td>
+										<td>{{medicalRecord.description}}</td>
+										<td>{{medicalRecord.createdAt|date("D, d M Y H:i A")}}</td>
+
+										<td class="align-middle">
+											<div class="d-flex justify-content-evenly align-items-center gap-3">
+												<a href="{{ path('medicalrecord_edit', { id: medicalRecord.id }) }}" class="btn p-0 border-0" data-bs-toggle="tooltip" title="Edit medicalRecord">
+													<img src="{{ asset('svgs/edit.svg') }}" alt="Edit">
+												</a>
+												<form method="post" action="{{ path('medicalrecord_delete', { id: medicalRecord.id }) }}" onsubmit="return confirm('Delete Medical Record For {{ medicalRecord.patient.cin }}?');">
+													<input type="hidden" name="_token" value="{{ csrf_token('delete_medicalrecord_' ~ medicalRecord.id) }}">
+													<button type="submit" class="btn p-0 border-0" data-bs-toggle="tooltip" title="Cancel medicalRecord">
+														<img src="{{ asset('svgs/delete.svg') }}" alt="Delete">
+													</button>
+												</form>
+											</div>
+										</td>
+									</tr>
+								{% endfor %}
+							{% endblock %}
+						{% endembed %}
+					{% else %}
+						<h1 class="text-center">No Meical Records</h1>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+    {% endif %}
+		<div class="accordion-item overflow-hidden rounded-5">
+			<h2 class="accordion-header" id="headingThree">
+				<button class="accordion-button fs-3 fw-medium bg-primary-subtle collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+					Prescriptions
+				</button>
+			</h2>
+			<div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+				<div class="accordion-body">
+					{% if patient.prescriptions|length > 0 %}
+						{% embed "layouts/table.twig" %}
+							{% block thead %}
+								<th class="dark-blue">Patient</th>
+								<th class="dark-blue">Medicaments</th>
+								<th class="dark-blue">CreatedAt</th>
+							{% endblock %}
+							{% block tbody %}
+								{% for prescription in patient.prescriptions %}
+									<tr class="table-light fw-medium">
+										<td>{{prescription.patient.firstName ~ " " ~ prescription.patient.lastName ~ "(" ~ prescription.patient.cin ~ ")"}}</td>
+										<td>
+											{# {{prescription.medicaments}} #}
+											<ul>
+												{% for med in prescription.medicaments|split("\n") %}
+													{% if med|trim %}
+														<li>
+															{{ med }}
+														</li>
+													{% endif %}
+												{% endfor %}
+											</ul>
+										</td>
+										<td>{{prescription.createdAt|date("D, d M Y H:i A")}}</td>
+										<td class="align-middle">
+											<div class="d-flex justify-content-evenly align-items-center gap-3">
+												<a href="{{ path('generate_pdf', { id: prescription.id }) }}" class="btn p-0 border-0" data-bs-toggle="tooltip" title="Print prescription">
+													<img src="{{ asset('svgs/print.svg') }}" alt="Edit">
+												</a>
+                        {% if is_granted("ROLE_DOCTOR") %}
+												<a href="{{ path('prescription_edit', { id: prescription.id }) }}" class="btn p-0 border-0" data-bs-toggle="tooltip" title="Edit prescription">
+													<img src="{{ asset('svgs/edit.svg') }}" alt="Edit">
+												</a>
+												<form method="post" action="{{ path('prescription_delete', { id: prescription.id }) }}" onsubmit="return confirm('Delete Medical Record For {{ prescription.patient.cin }}?');">
+													<input type="hidden" name="_token" value="{{ csrf_token('delete_prescription_' ~ prescription.id) }}">
+													<button type="submit" class="btn p-0 border-0" data-bs-toggle="tooltip" title="Delete prescription">
+														<img src="{{ asset('svgs/delete.svg') }}" alt="Delete">
+													</button>
+												</form>
+                        {% endif %}
+											</div>
+										</td>
+									</tr>
+								{% endfor %}
+							{% endblock %}
+						{% endembed %}
+					{% else %}
+						<h1 class="text-center">No Prescriptions</h1>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

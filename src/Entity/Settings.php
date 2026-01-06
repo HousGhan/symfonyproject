@@ -34,6 +34,9 @@ class Settings
   #[ORM\Column(length: 255, nullable: true)]
   private ?string $specialty = null;
 
+  #[ORM\Column(length: 255, nullable: true)]
+  private ?string $doctor = null;
+
   public function getId(): ?int
   {
     return $this->id;
@@ -109,5 +112,17 @@ class Settings
     $this->specialty = $specialty;
 
     return $this;
+  }
+
+  public function getDoctor(): ?string
+  {
+      return $this->doctor;
+  }
+
+  public function setDoctor(?string $doctor): static
+  {
+      $this->doctor = $doctor;
+
+      return $this;
   }
 }

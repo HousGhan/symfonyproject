@@ -8,7 +8,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -31,7 +30,7 @@ class AppointementType extends AbstractType
             'Pending' => 'pending',
             'Confirmed'   => 'confirmed',
           ],
-          'placeholder' => '  ',
+          'placeholder' => '',
           'attr' => [
             'class' => 'form-select',
           ],
@@ -41,11 +40,6 @@ class AppointementType extends AbstractType
           'attr' => [
             'class' => 'form-control',
             'placeholder' => ' ',
-          ],
-        ])
-        ->add('payed', CheckboxType::class, [
-          'attr' => [
-            'class' => 'form-check-input',
           ],
         ]);
     }

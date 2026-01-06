@@ -36,6 +36,9 @@
 						<td>{{patient.createdAt|date("D, d M Y H:i A")}}</td>
 						<td class="align-middle">
 							<div class="d-flex justify-content-evenly gap-3 align-items-center">
+								<a href="{{path("patient_show",{id:patient.id})}}" class="btn p-0 border-0" title="Patient details">
+									<img src="{{asset("svgs/details.svg")}}" alt="Add appointement btn">
+								</a>
 								<a href="{{path("appointement_add",{id:patient.id})}}" class="btn p-0 border-0" title="Add Appointement">
 									<img src="{{asset("svgs/calendaradd.svg")}}" alt="Add appointement btn">
 								</a>

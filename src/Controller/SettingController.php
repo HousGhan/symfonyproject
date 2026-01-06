@@ -10,13 +10,26 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\SettingsRepository;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class SettingController extends AbstractController
 {
   #[Route('/settings', name: 'app_settings')]
   public function index(Request $request, EntityManagerInterface $em, SettingsRepository $sr): Response
   {
-    $settings = $sr->find(1); // or ->findOneBy([])
+
+    $u = $this->getUser();
+    if (!$u) {
+      return $this->redirectToRoute("app_login");
+    }
+
+    if ($u) {
+      if (in_array('ROLE_SECRETARY', $u->getRoles())) {
+        return $this->redirectToRoute('app_patients');
+      }
+    }
+
+    $settings = $sr->find(1);
 
     if (!$settings) {
       $settings = new Settings();

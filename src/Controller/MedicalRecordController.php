@@ -12,8 +12,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Patient;
 use DateTimeImmutable as Date;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/medicalrecords')]
+#[IsGranted("ROLE_DOCTOR")]
 final class MedicalRecordController extends AbstractController
 {
   #[Route(name: 'app_medicalrecords')]

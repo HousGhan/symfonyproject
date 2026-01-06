@@ -31,4 +31,12 @@ class PatientRepository extends ServiceEntityRepository
       ->getResult()
     ;
   }
+
+  public function totalPatients()
+  {
+    return $this->createQuerybuilder('p')
+      ->select('COUNT(p.id)')
+      ->getQuery()
+      ->getSingleScalarResult();
+  }
 }

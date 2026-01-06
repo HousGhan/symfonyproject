@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Form\PrescriptionType;
 use DateTimeImmutable as Date;
 use App\Repository\SettingsRepository;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/prescriptions')]
 final class PrescriptionController extends AbstractController
@@ -26,14 +27,7 @@ final class PrescriptionController extends AbstractController
     if (!$u) {
       return $this->redirectToRoute("app_login");
     }
-    $prescriptions = array_map(function ($p) {
-      $rows = array_values(array_filter(
-        array_map('trim', explode("\n", $p->getMedicaments())),
-        fn($row) => $row !== ''
-      ));
-      $p->parsed = $rows;
-      return $p;
-    }, $pr->search($request->query->get('search'), $request->query->get('orderby')));
+    $prescriptions =  $pr->search($request->query->get('search'), $request->query->get('orderby'));
     // dd($prescriptions);
     return $this->render('prescription/index.html.twig', [
       'prescriptions' => $prescriptions,

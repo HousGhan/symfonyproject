@@ -20,8 +20,12 @@
 						<td>
 							{# {{prescription.medicaments}} #}
 							<ul>
-								{% for med in prescription.parsed %}
-									<li>{{med}}</li>
+								{% for med in prescription.medicaments|split("\n") %}
+									{% if med|trim %}
+										<li>
+											{{ med }}
+										</li>
+									{% endif %}
 								{% endfor %}
 							</ul>
 						</td>

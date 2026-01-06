@@ -14,11 +14,10 @@ use DateTimeImmutable as Date;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-
+#[IsGranted("ROLE_DOCTOR")]
 final class UserController extends AbstractController
 {
   #[Route('/users', name: 'app_users')]
-  #[IsGranted('ROLE_DOCTOR')]
   public function index(UserRepository $ur, Request $request): Response
   {
     $u = $this->getUser();
@@ -31,7 +30,6 @@ final class UserController extends AbstractController
   }
 
   #[Route('/users/add', name: 'user_add')]
-  #[IsGranted('ROLE_DOCTOR')]
   public function create(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher): Response
   {
     $u = $this->getUser();
@@ -64,7 +62,6 @@ final class UserController extends AbstractController
   }
 
   #[Route('/users/{id}/edit', name: 'user_edit')]
-  #[IsGranted('ROLE_DOCTOR')]
   public function edit(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher, User $user)
   {
     $u = $this->getUser();
@@ -95,7 +92,6 @@ final class UserController extends AbstractController
   }
 
   #[Route('/users/{id}/delete', name: 'user_delete')]
-  #[IsGranted('ROLE_DOCTOR')]
   public function delete(Request $request, EntityManagerInterface $em, User $user)
   {
     $u = $this->getUser();

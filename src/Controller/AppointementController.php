@@ -44,8 +44,8 @@ final class AppointementController extends AbstractController
     }
     $limit = $sr->find(1)->getLimitAppointements();
     $appointementsCount = $ar->countTodaysAppointements();
-    if($appointementsCount === $limit){
-      $this->addFlash('error',"Appointements limit($limit) for today reached");
+    if ($appointementsCount >= $limit && $limit > 0) {
+      $this->addFlash('error', "Appointements limit($limit) for today reached");
       return $this->redirectToRoute("app_patients");
     }
 
@@ -58,6 +58,7 @@ final class AppointementController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+      $appointement->setStatus("pending");
       $appointement->setPatient($patient);
       $appointement->setCreatedAt(new Date());
       $appointement->setUpdatedAt(new Date());
@@ -89,6 +90,9 @@ final class AppointementController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+      if ($appointement->getPrice() > 0) {
+        $appointement->setPayed(true);
+      }
       $appointement->setUpdatedAt(new Date());
       $em->flush();
 

@@ -28,6 +28,12 @@ class SettingsType extends AbstractType
           'placeholder' => ' ',
         ],
       ])
+      ->add('doctor', TextType::class, [
+        'attr' => [
+          'class' => 'form-control',
+          'placeholder' => ' ',
+        ],
+      ])
       ->add('cabinet', TextType::class, [
         'attr' => [
           'class' => 'form-control',

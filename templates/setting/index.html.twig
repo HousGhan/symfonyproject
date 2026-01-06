@@ -15,6 +15,18 @@
 
 						{{ form_start(form) }}
 						<div class="form-floating mb-3">
+							{{ form_widget(form.doctor) }}
+							<label for="">
+								Doctor's Name
+								{# <span class="text-danger fw-bold">
+									*
+									{% if form.doctor.vars.errors|length > 0 %}
+										{{ form.doctor.vars.errors[0].message }}
+									{% endif %}
+								</span> #}
+							</label>
+						</div>
+						<div class="form-floating mb-3">
 							{{ form_widget(form.cabinet) }}
 							<label for="">
 								Cabinet Name
@@ -42,12 +54,12 @@
 							{{ form_widget(form.limitAppointements) }}
 							<label for="">
 								Limit Appointements Per Day
-								<span class="text-danger fw-bold">
+								{# <span class="text-danger fw-bold">
 									*
 									{% if form.limitAppointements.vars.errors|length > 0 %}
 										{{ form.limitAppointements.vars.errors[0].message }}
 									{% endif %}
-								</span>
+								</span> #}
 							</label>
 						</div>
 						<div class="form-floating mb-3">

@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use DateTimeImmutable as Date;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+
 #[Route("/patients")]
 final class PatientController extends AbstractController
 {
@@ -43,6 +44,7 @@ final class PatientController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+      /** @var \App\Entity\User $user */
       $user = $this->getUser();
       $patient->setCreatedBy($user->getFullName());
       $patient->setCreatedAt(new Date());
@@ -59,10 +61,11 @@ final class PatientController extends AbstractController
     ]);
   }
 
-  #[Route('/{id}')]
+  #[Route('/{id}', name: "patient_show")]
   public function show(Patient $patient)
   {
-    return $this->render("patients/show.html.twig");
+    // dd($patient);
+    return $this->render("patient/show.html.twig", ['patient' => $patient]);
   }
 
   #[Route('/{id}/edit', name: 'patient_edit')]
@@ -82,6 +85,7 @@ final class PatientController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+      /** @var \App\Entity\User $user */
       $user = $this->getUser();
       $patient->setCreatedBy($user->getFullName());
       $patient->setUpdatedAt(new Date());

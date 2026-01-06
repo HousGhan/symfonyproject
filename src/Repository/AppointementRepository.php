@@ -76,45 +76,27 @@ class AppointementRepository extends ServiceEntityRepository
       ->getSingleScalarResult();
   }
 
-  public function getRevenueData(string $interval = 'month'): array
+  public function totalAppointements()
+  {
+    return $this->createQueryBuilder('a')
+      ->select('COUNT(a.id)')
+      ->getQuery()
+      ->getSingleScalarResult();
+  }
+
+  public function getMonthlyPrices(): array
   {
     $conn = $this->getEntityManager()->getConnection();
-    $now = new \DateTimeImmutable('now');
 
-    switch ($interval) {
-      case 'week':
-        $start = $now->modify('-6 days')->format('Y-m-d 00:00:00');
-        $groupBy = 'DATE(date)';
-        $select = 'DATE(date) AS date';
-        break;
-
-      case 'month':
-        $start = $now->modify('first day of this month')->format('Y-m-d 00:00:00');
-        $groupBy = 'DATE(date)';
-        $select = 'DATE(date) AS date';
-        break;
-
-      case 'year':
-        $start = $now->modify('first day of January')->format('Y-m-d 00:00:00');
-        $groupBy = "DATE_FORMAT(date, '%Y-%m-01')"; // first day of month
-        $select = "DATE_FORMAT(date, '%Y-%m-01') AS date"; // returns '2026-01-01', '2026-02-01', ...
-        break;
-
-      default:
-        $start = $now->modify('first day of this month')->format('Y-m-d 00:00:00');
-        $groupBy = 'DATE(date)';
-        $select = 'DATE(date) AS date';
-    }
-
-    $sql = "SELECT $select, SUM(price) AS revenue
-            FROM appointement
-            WHERE payed = 1 AND date >= '$start'
-            GROUP BY $groupBy
-            ORDER BY $groupBy ASC";
+    $sql = '
+    SELECT DATE_FORMAT(created_at, "%Y-%m") AS month, SUM(price) AS totalPrice
+    FROM appointement
+    GROUP BY month
+    ORDER BY month ASC
+';
 
     $stmt = $conn->prepare($sql);
     $result = $stmt->executeQuery();
-
     return $result->fetchAllAssociative();
   }
 }

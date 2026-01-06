@@ -20,22 +20,17 @@
   backdrop-filter: blur(5px);
 }
 
-/* .crud-alert {
-  width: 0px;
-  animation: alert-show 0.3s ease-in-out;
-}
-
-@keyframes alert-show {
-  from {
-    width: 0px;
-  }
-  to {
-    width: 100%;
-  }
-} */
-
 .login-wrapper {
   width: 30% !important;
+}
+
+/* .kpis {
+  height: 250px;
+} */
+
+main.flex-fill {
+  flex: 1 1 auto; /* allow main to grow and shrink */
+  min-width: 0; /* important: allows content to shrink inside flex */
 }
 
 @media (max-width: 992px) {
