@@ -14,9 +14,10 @@ use App\Repository\SettingsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use DateTimeImmutable as Date;
 
+#[Route('/appointements')]
 final class AppointementController extends AbstractController
 {
-  #[Route('/appointements', name: 'app_appointements')]
+  #[Route(name: 'app_appointements')]
   public function index(AppointementRepository $ar, Request $request): Response
   {
     $u = $this->getUser();
@@ -34,7 +35,7 @@ final class AppointementController extends AbstractController
     return $this->render('appointement/index.html.twig', compact('appointements'));
   }
 
-  #[Route('/appointements/{id}/add', name: 'appointement_add')]
+  #[Route('/{id}/add', name: 'appointement_add')]
   public function create(Request $request, Patient $patient, EntityManagerInterface $em, AppointementRepository $ar, SettingsRepository $sr)
   {
     $u = $this->getUser();
@@ -74,7 +75,7 @@ final class AppointementController extends AbstractController
     ]);
   }
 
-  #[Route('/appointements/{id}/edit', name: 'appointement_edit')]
+  #[Route('/{id}/edit', name: 'appointement_edit')]
   public function edit(Request $request, Appointement $appointement, EntityManagerInterface $em)
   {
     $u = $this->getUser();
@@ -105,7 +106,7 @@ final class AppointementController extends AbstractController
     ]);
   }
 
-  #[Route('/appointements/{id}/delete', name: 'appointement_delete')]
+  #[Route('/{id}/delete', name: 'appointement_delete')]
   public function delete(
     Request $request,
     Appointement $appointement,

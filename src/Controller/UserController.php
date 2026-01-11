@@ -15,9 +15,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted("ROLE_DOCTOR")]
+#[Route('/users')]
 final class UserController extends AbstractController
 {
-  #[Route('/users', name: 'app_users')]
+  #[Route(name: 'app_users')]
   public function index(UserRepository $ur, Request $request): Response
   {
     $u = $this->getUser();
@@ -29,7 +30,7 @@ final class UserController extends AbstractController
     return $this->render('user/index.html.twig', compact('users'));
   }
 
-  #[Route('/users/add', name: 'user_add')]
+  #[Route('/add', name: 'user_add')]
   public function create(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher): Response
   {
     $u = $this->getUser();
@@ -61,7 +62,7 @@ final class UserController extends AbstractController
     ]);
   }
 
-  #[Route('/users/{id}/edit', name: 'user_edit')]
+  #[Route('/{id}/edit', name: 'user_edit')]
   public function edit(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher, User $user)
   {
     $u = $this->getUser();
@@ -89,7 +90,7 @@ final class UserController extends AbstractController
     ]);
   }
 
-  #[Route('/users/{id}/delete', name: 'user_delete')]
+  #[Route('/{id}/delete', name: 'user_delete')]
   public function delete(Request $request, EntityManagerInterface $em, User $user)
   {
     $u = $this->getUser();
