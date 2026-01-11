@@ -17,17 +17,13 @@ final class DashboardController extends AbstractController
   #[Route(name: "app_dashboard")]
   public function index(AppointementRepository $ar, PatientRepository $pr): Response
   {
-
     $monthlyData = $ar->getMonthlyPrices();
-
     $labels = array_column($monthlyData, 'month');
     $data = array_column($monthlyData, 'totalPrice');
-    // dd($data,$labels);
     $totalRevenue = $ar->getTotalRevenue();
     $todaysAppointements = $ar->countTodaysAppointements();
     $totalAppointements = $ar->totalAppointements();
     $totalPatients = $pr->totalPatients();
-    // dd($totalRevenue, $todaysAppointements);
     return $this->render('dashboard/index.html.twig', [
       'totalRevenue' => $totalRevenue,
       'todaysAppointements' => $todaysAppointements,

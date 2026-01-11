@@ -25,8 +25,7 @@ final class UserController extends AbstractController
     if (!$u) {
       return $this->redirectToRoute("app_login");
     }
-    $users = $ur->search($request->query->get('search'), $request->query->get('orderby'));
-    // dd($users);
+    $users = $ur->search($request->query->get('search'), $request->query->get('orderby'));   
     return $this->render('user/index.html.twig', compact('users'));
   }
 
@@ -40,23 +39,17 @@ final class UserController extends AbstractController
     $user = new User();
     $form = $this->createForm(UserType::class, $user, [
       'is_edit' => false
-    ]);
-    // dd($form);
-
+    ]);   
     $form->handleRequest($request);
-
     if ($form->isSubmitted() && $form->isValid()) {
       $user->setPassword($hasher->hashPassword($user, $form->get('password')->getData()));
       $user->setCreatedAt(new Date());
       $user->setUpdatedAt(new Date());
-
       $em->persist($user);
       $em->flush();
-
       $this->addFlash('success', 'User added successfully!');
       return $this->redirectToRoute('app_users');
     }
-
     return $this->render('user/add.twig', [
       'form' => $form,
     ]);
@@ -71,20 +64,15 @@ final class UserController extends AbstractController
     }
     $form = $this->createForm(UserType::class, $user, [
       'is_edit' => true
-    ]);
-    // dd($form);
-
+    ]);   
     $form->handleRequest($request);
-
     if ($form->isSubmitted() && $form->isValid()) {
       $user->setPassword($hasher->hashPassword($user, $form->get('password')->getData()));
       $user->setUpdatedAt(new Date());
       $em->flush();
-
       $this->addFlash('success', 'User updated successfully!');
       return $this->redirectToRoute('app_users');
     }
-
     return $this->render('user/edit.twig', [
       'form' => $form,
     ]);
@@ -100,10 +88,8 @@ final class UserController extends AbstractController
     if ($this->isCsrfTokenValid('delete_user_' . $user->getId(), $request->request->get('_token'))) {
       $em->remove($user);
       $em->flush();
-
       $this->addFlash('success', 'User deleted successfully!');
     }
-
     return $this->redirectToRoute('app_users');
   }
 }

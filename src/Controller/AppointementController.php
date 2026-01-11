@@ -24,14 +24,12 @@ final class AppointementController extends AbstractController
     if (!$u) {
       return $this->redirectToRoute("app_login");
     }
-
     $appointements = $ar->search(
       $request->query->get('search'),
       $request->query->get('orderby'),
       $request->query->get('from'),
       $request->query->get('to')
     );
-    // dd($appointements);
     return $this->render('appointement/index.html.twig', compact('appointements'));
   }
 
@@ -48,15 +46,11 @@ final class AppointementController extends AbstractController
       $this->addFlash('error', "Appointements limit($limit) for today reached");
       return $this->redirectToRoute("app_patients");
     }
-
     $appointement = new Appointement();
     $form = $this->createForm(AppointementType::class, $appointement, [
       'is_edit' => false
     ]);
-    // dd($form);
-
     $form->handleRequest($request);
-
     if ($form->isSubmitted() && $form->isValid()) {
       $appointement->setStatus("pending");
       $appointement->setPatient($patient);
@@ -64,11 +58,9 @@ final class AppointementController extends AbstractController
       $appointement->setUpdatedAt(new Date());
       $em->persist($appointement);
       $em->flush();
-
       $this->addFlash('success', "Appointement added  for '{$patient->getFirstName()} {$patient->getLastName()}'!");
       return $this->redirectToRoute('app_patients');
     }
-
     return $this->render('appointement/add.twig', [
       'form' => $form,
       'patient' => $patient
@@ -85,21 +77,16 @@ final class AppointementController extends AbstractController
     $form = $this->createForm(AppointementType::class, $appointement, [
       'is_edit' => true
     ]);
-    // dd($form);
-
     $form->handleRequest($request);
-
     if ($form->isSubmitted() && $form->isValid()) {
       if ($appointement->getPrice() > 0) {
         $appointement->setPayed(true);
       }
       $appointement->setUpdatedAt(new Date());
       $em->flush();
-
       $this->addFlash('success', "Appointement updated for {$appointement->getPatient()->getFirstName()} {$appointement->getPatient()->getLastName()}!");
       return $this->redirectToRoute('app_appointements');
     }
-
     return $this->render('appointement/edit.twig', [
       'form' => $form,
       'appointement' => $appointement
@@ -119,10 +106,8 @@ final class AppointementController extends AbstractController
     if ($this->isCsrfTokenValid('delete_appointement_' . $appointement->getId(), $request->request->get('_token'))) {
       $em->remove($appointement);
       $em->flush();
-
       $this->addFlash('success', 'Appointement deleted successfully!');
     }
-
     return $this->redirectToRoute('app_appointements');
   }
 }

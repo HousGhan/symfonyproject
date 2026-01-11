@@ -43,7 +43,6 @@ final class MedicalRecordController extends AbstractController
       'is_edit' => false
     ]);
     $form->handleRequest($request);
-
     if ($form->isSubmitted() && $form->isValid()) {
       $medicalRecord->setPatient($patient);
       $medicalRecord->setCreatedAt(new Date());
@@ -53,7 +52,6 @@ final class MedicalRecordController extends AbstractController
       $this->addFlash('success', "Medical record added for {$patient->getFirstName()} {$patient->getLastName()}");
       return $this->redirectToRoute('app_medicalrecords');
     }
-
     return $this->render('medicalrecord/add.html.twig', [
       'patient' => $patient,
       'form' => $form,
@@ -71,15 +69,12 @@ final class MedicalRecordController extends AbstractController
       'is_edit' => true
     ]);
     $form->handleRequest($request);
-
     if ($form->isSubmitted() && $form->isValid()) {
       $medicalRecord->setUpdatedAt(new Date());
       $em->flush();
       $this->addFlash('success', "Medical record updated for {$medicalRecord->getPatient()->getFirstName()} {$medicalRecord->getPatient()->getLastName()}");
-
       return $this->redirectToRoute('app_medicalrecords');
     }
-
     return $this->render('medicalrecord/edit.html.twig', [
       'medicalRecord' => $medicalRecord,
       'form' => $form,
@@ -98,7 +93,6 @@ final class MedicalRecordController extends AbstractController
       $em->flush();
       $this->addFlash('success', "Medical record deleted successfully");
     }
-
     return $this->redirectToRoute('app_medicalrecords');
   }
 }

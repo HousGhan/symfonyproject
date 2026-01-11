@@ -37,10 +37,7 @@ final class PatientController extends AbstractController
     $form = $this->createForm(PatientType::class, $patient, [
       'is_edit' => false
     ]);
-    // dd($form);
-
     $form->handleRequest($request);
-
     if ($form->isSubmitted() && $form->isValid()) {
       /** @var \App\Entity\User $user */
       $user = $this->getUser();
@@ -49,11 +46,9 @@ final class PatientController extends AbstractController
       $patient->setUpdatedAt(new Date());
       $em->persist($patient);
       $em->flush();
-
       $this->addFlash('success', 'Patient added successfully!');
       return $this->redirectToRoute('app_patients');
     }
-
     return $this->render('patient/add.twig', [
       'form' => $form,
     ]);
@@ -62,7 +57,6 @@ final class PatientController extends AbstractController
   #[Route('/{id}', name: "patient_show")]
   public function show(Patient $patient)
   {
-    // dd($patient);
     return $this->render("patient/show.html.twig", ['patient' => $patient]);
   }
 
@@ -79,21 +73,16 @@ final class PatientController extends AbstractController
     $form = $this->createForm(PatientType::class, $patient, [
       'is_edit' => true
     ]);
-
     $form->handleRequest($request);
-
     if ($form->isSubmitted() && $form->isValid()) {
       /** @var \App\Entity\User $user */
       $user = $this->getUser();
       $patient->setCreatedBy($user->getFullName());
       $patient->setUpdatedAt(new Date());
-
       $em->flush();
-
       $this->addFlash('success', 'Patient updated successfully!');
       return $this->redirectToRoute('app_patients');
     }
-
     return $this->render('patient/edit.twig', [
       'form' => $form,
       'patient' => $patient,
@@ -113,10 +102,8 @@ final class PatientController extends AbstractController
     if ($this->isCsrfTokenValid('delete_patient_' . $patient->getId(), $request->request->get('_token'))) {
       $em->remove($patient);
       $em->flush();
-
       $this->addFlash('success', 'Patient deleted successfully!');
     }
-
     return $this->redirectToRoute('app_patients');
   }
 }

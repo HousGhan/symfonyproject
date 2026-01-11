@@ -27,7 +27,6 @@ final class PrescriptionController extends AbstractController
       return $this->redirectToRoute("app_login");
     }
     $prescriptions =  $pr->search($request->query->get('search'), $request->query->get('orderby'));
-    // dd($prescriptions);
     return $this->render('prescription/index.html.twig', [
       'prescriptions' => $prescriptions,
     ]);
@@ -45,18 +44,15 @@ final class PrescriptionController extends AbstractController
       'is_edit' => false
     ]);
     $form->handleRequest($request);
-
     if ($form->isSubmitted() && $form->isValid()) {
       $prescription->setPatient($patient);
       $prescription->setCreatedAt(new Date());
       $prescription->setUpdatedAt(new Date());
       $em->persist($prescription);
-      $em->flush();
-      // dd($prescription->getId());
+      $em->flush();  
       $this->addFlash('success', "Prescription added for {$patient->getFirstName()} {$patient->getLastName()}");
       return $this->redirectToRoute('app_prescriptions');
     }
-
     return $this->render('prescription/add.html.twig', [
       'patient' => $patient,
       'form' => $form,
@@ -75,18 +71,14 @@ final class PrescriptionController extends AbstractController
     $options = new Options();
     $options->set('defaultFont', 'Verdana');
     $dompdf = new Dompdf($options);
-
     $html = $this->renderView('prescription/pdf.twig', [
       "prescription" => $prescription,
       "user" => $user,
       "settings" => $settings,
     ]);
-
     $dompdf->loadHtml($html);
     $dompdf->setPaper('A4', 'portrait');
     $dompdf->render();
-
-    // Output the PDF to browser
     return new Response(
       $dompdf->output(),
       200,
@@ -108,15 +100,12 @@ final class PrescriptionController extends AbstractController
       'is_edit' => true
     ]);
     $form->handleRequest($request);
-
     if ($form->isSubmitted() && $form->isValid()) {
       $prescription->setUpdatedAt(new Date());
       $em->flush();
       $this->addFlash('success', "Prescription updated for {$prescription->getPatient()->getFirstName()} {$prescription->getPatient()->getLastName()}");
-
       return $this->redirectToRoute('app_prescriptions');
     }
-
     return $this->render('prescription/edit.html.twig', [
       'prescription' => $prescription,
       'form' => $form,
@@ -135,7 +124,6 @@ final class PrescriptionController extends AbstractController
       $em->flush();
       $this->addFlash('success', "Prescription deleted successfully");
     }
-
     return $this->redirectToRoute('app_prescriptions');
   }
 }

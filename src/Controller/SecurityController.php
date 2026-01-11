@@ -13,12 +13,8 @@ class SecurityController extends AbstractController
   public function login(AuthenticationUtils $authenticationUtils): Response
   {
     $error = $authenticationUtils->getLastAuthenticationError();
-
     $lastUsername = $authenticationUtils->getLastUsername();
-
     $user = $this->getUser();
-    // dd($user);
-
     if ($user) {
       if (in_array('ROLE_DOCTOR', $user->getRoles())) {
         return $this->redirectToRoute('app_dashboard');
@@ -28,7 +24,6 @@ class SecurityController extends AbstractController
         return $this->redirectToRoute("app_login");
       }
     }
-
     return $this->render('security/login.html.twig', [
       'last_username' => $lastUsername,
       'error' => $error,
