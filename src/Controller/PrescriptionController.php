@@ -15,7 +15,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Form\PrescriptionType;
 use DateTimeImmutable as Date;
 use App\Repository\SettingsRepository;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/prescriptions')]
 final class PrescriptionController extends AbstractController

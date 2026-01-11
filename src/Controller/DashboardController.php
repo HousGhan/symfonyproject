@@ -15,12 +15,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class DashboardController extends AbstractController
 {
   #[Route(name: "app_dashboard")]
-  public function index(AppointementRepository $ar, PatientRepository $pr, Request $request): Response
+  public function index(AppointementRepository $ar, PatientRepository $pr): Response
   {
 
     $monthlyData = $ar->getMonthlyPrices();
 
-    // Extract labels and data
     $labels = array_column($monthlyData, 'month');
     $data = array_column($monthlyData, 'totalPrice');
     // dd($data,$labels);

@@ -12,7 +12,6 @@ use App\Form\AppointementType;
 use App\Repository\AppointementRepository;
 use App\Repository\SettingsRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use DateTimeImmutable as Date;
 
 final class AppointementController extends AbstractController

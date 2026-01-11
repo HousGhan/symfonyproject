@@ -11,8 +11,6 @@ use App\Repository\PatientRepository;
 use App\Form\PatientType;
 use Doctrine\ORM\EntityManagerInterface;
 use DateTimeImmutable as Date;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-
 
 #[Route("/patients")]
 final class PatientController extends AbstractController
